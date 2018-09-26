@@ -9,7 +9,7 @@ namespace BankApp
     class Bank
     {
         public Database db;
-        public Customers cs;
+        public Customer cs;
 
         public void BankOpen()
         {
@@ -26,10 +26,7 @@ namespace BankApp
             throw new NotImplementedException();
         }
 
-        public void CreateNewCustomer()
-        {
-            throw new NotImplementedException();
-        }
+        
 
 
     }

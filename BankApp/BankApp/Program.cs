@@ -10,6 +10,7 @@ namespace BankApp
     {
         static void Main(string[] args)
         {
+            //Skapa samt starta bankappen.
         }
     }
 }
