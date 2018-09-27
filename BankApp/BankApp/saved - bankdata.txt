@@ -1,0 +1,92 @@
+91
+1001;557161-2299;Alfreds Futterkiste;Obere Str. 57;Berlin;;12209;Germany;030-0074321
+1002;554950-3281;Ana Trujillo Emparedados y helados;Avda. de la Constitución 2222;México D.F.;;05021;Mexico;(5) 555-4729
+1003;552637-6180;Antonio Moreno Taquería;Mataderos  2312;México D.F.;;05023;Mexico;(5) 555-3932
+1004;557128-4297;Around the Horn;120 Hanover Sq.;London;;WA1 1DP;UK;(171) 555-7788
+1005;559268-7528;Berglunds snabbköp;Berguvsvägen  8;Luleå;;S-958 22;Sweden;0921-12 34 65
+1006;558912-8056;Blauer See Delikatessen;Forsterstr. 57;Mannheim;;68306;Germany;0621-08460
+1007;555367-4754;Blondel père et fils;24, place Kléber;Strasbourg;;67000;France;88.60.15.31
+1008;553596-7078;Bólido Comidas preparadas;C/ Araquil, 67;Madrid;;28023;Spain;(91) 555 22 82
+1009;559403-3176;Bon app';12, rue des Bouchers;Marseille;;13008;France;91.24.45.40
+1010;551094-6907;Bottom-Dollar Markets;23 Tsawassen Blvd.;Tsawassen;BC;T2F 8M4;Canada;(604) 555-4729
+1011;551002-9852;B's Beverages;Fauntleroy Circus;London;;EC2 5NT;UK;(171) 555-1212
+1012;553775-0670;Cactus Comidas para llevar;Cerrito 333;Buenos Aires;;1010;Argentina;(1) 135-5555
+1013;556958-9111;Centro comercial Moctezuma;Sierras de Granada 9993;México D.F.;;05022;Mexico;(5) 555-3392
+1014;551430-8799;Chop-suey Chinese;Hauptstr. 29;Bern;;3012;Switzerland;0452-076545
+1015;552060-3431;Comércio Mineiro;Av. dos Lusíadas, 23;São Paulo;SP;05432-043;Brazil;(11) 555-7647
+1016;553083-0073;Consolidated Holdings;Berkeley Gardens, 12 Brewery ;London;;WX1 6LT;UK;(171) 555-2282
+1017;552114-1084;Drachenblut Delikatessen;Walserweg 21;Aachen;;52066;Germany;0241-039123
+1018;555353-4537;Du monde entier;67, rue des Cinquante Otages;Nantes;;44000;France;40.67.88.88
+1019;554026-8967;Eastern Connection;35 King George;London;;WX3 6FW;UK;(171) 555-0297
+1020;554109-1640;Ernst Handel;Kirchgasse 6;Graz;;8010;Austria;7675-3425
+1021;557891-7048;Familia Arquibaldo;Rua Orós, 92;São Paulo;SP;05442-030;Brazil;(11) 555-9857
+1022;553150-8371;FISSA Fabrica Inter. Salchichas S.A.;C/ Moralzarzal, 86;Madrid;;28034;Spain;(91) 555 94 44
+1023;559992-5079;Folies gourmandes;184, chaussée de Tournai;Lille;;59000;France;20.16.10.16
+1024;556392-8406;Folk och fä HB;Åkergatan 24;Bräcke;;S-844 67;Sweden;0695-34 67 21
+1025;558619-0141;Frankenversand;Berliner Platz 43;München;;80805;Germany;089-0877310
+1026;558897-0979;France restauration;54, rue Royale;Nantes;;44000;France;40.32.21.21
+1027;551632-0214;Franchi S.p.A.;Via Monte Bianco 34;Torino;;10100;Italy;011-4988260
+1028;554587-6921;Furia Bacalhau e Frutos do Mar;Jardim das rosas n. 32;Lisboa;;1675;Portugal;(1) 354-2534
+1029;557207-5348;Galería del gastrónomo;Rambla de Cataluña, 23;Barcelona;;08022;Spain;(93) 203 4560
+1030;551961-5271;Godos Cocina Típica;C/ Romero, 33;Sevilla;;41101;Spain;(95) 555 82 82
+1031;552903-0560;Gourmet Lanchonetes;Av. Brasil, 442;Campinas;SP;04876-786;Brazil;(11) 555-9482
+1032;551553-1910;Great Lakes Food Market;2732 Baker Blvd.;Eugene;OR;97403;USA;(503) 555-7555
+1033;556674-5369;GROSELLA-Restaurante;5ª Ave. Los Palos Grandes;Caracas;DF;1081;Venezuela;(2) 283-2951
+1034;559693-2318;Hanari Carnes;Rua do Paço, 67;Rio de Janeiro;RJ;05454-876;Brazil;(21) 555-0091
+1035;551683-1343;HILARIÓN-Abastos;Carrera 22 con Ave. Carlos Soublette #8-35;San Cristóbal;Táchira;5022;Venezuela;(5) 555-1340
+1036;552026-0349;Hungry Coyote Import Store;City Center Plaza, 516 Main St.;Elgin;OR;97827;USA;(503) 555-6874
+1037;556472-7880;Hungry Owl All-Night Grocers;8 Johnstown Road;Cork;Co. Cork;;Ireland;2967 542
+1038;556355-9623;Island Trading;Garden House, Crowther Way;Cowes;Isle of Wight;PO31 7PJ;UK;(198) 555-8888
+1039;555879-0688;Königlich Essen;Maubelstr. 90;Brandenburg;;14776;Germany;0555-09876
+1040;556111-9628;La corne d'abondance;67, avenue de l'Europe;Versailles;;78000;France;30.59.84.10
+1041;555338-3000;La maison d'Asie;1 rue Alsace-Lorraine;Toulouse;;31000;France;61.77.61.10
+1042;558689-9717;Laughing Bacchus Wine Cellars;1900 Oak St.;Vancouver;BC;V3F 2K1;Canada;(604) 555-3392
+1043;557302-5185;Lazy K Kountry Store;12 Orchestra Terrace;Walla Walla;WA;99362;USA;(509) 555-7969
+1044;555225-1828;Lehmanns Marktstand;Magazinweg 7;Frankfurt a.M. ;;60528;Germany;069-0245984
+1045;557486-3261;Let's Stop N Shop;87 Polk St. Suite 5;San Francisco;CA;94117;USA;(415) 555-5938
+1046;552860-8762;LILA-Supermercado;Carrera 52 con Ave. Bolívar #65-98 Llano Largo;Barquisimeto;Lara;3508;Venezuela;(9) 331-6954
+1047;559456-5284;LINO-Delicateses;Ave. 5 de Mayo Porlamar;I. de Margarita;Nueva Esparta;4980;Venezuela;(8) 34-56-12
+1048;557085-8281;Lonesome Pine Restaurant;89 Chiaroscuro Rd.;Portland;OR;97219;USA;(503) 555-9573
+1049;557574-6754;Magazzini Alimentari Riuniti;Via Ludovico il Moro 22;Bergamo;;24100;Italy;035-640230
+1050;555611-6357;Maison Dewey;Rue Joseph-Bens 532;Bruxelles;;B-1180;Belgium;(02) 201 24 67
+1051;555116-5904;Mère Paillarde;43 rue St. Laurent;Montréal;Québec;H1J 1C3;Canada;(514) 555-8054
+1052;558518-1471;Morgenstern Gesundkost;Heerstr. 22;Leipzig;;04179;Germany;0342-023176
+1053;553720-2664;North/South;South House, 300 Queensbridge;London;;SW7 1RZ;UK;(171) 555-7733
+1054;554018-6136;Océano Atlántico Ltda.;Ing. Gustavo Moncada 8585, Piso 20-A;Buenos Aires;;1010;Argentina;(1) 135-5333
+1055;555889-6980;Old World Delicatessen;2743 Bering St.;Anchorage;AK;99508;USA;(907) 555-7584
+1056;553806-5714;Ottilies Käseladen;Mehrheimerstr. 369;Köln;;50739;Germany;0221-0644327
+1057;555719-5269;Paris spécialités;265, boulevard Charonne;Paris;;75012;France;(1) 42.34.22.66
+1058;553913-6746;Pericles Comidas clásicas;Calle Dr. Jorge Cash 321;México D.F.;;05033;Mexico;(5) 552-3745
+1059;559142-2877;Piccolo und mehr;Geislweg 14;Salzburg;;5020;Austria;6562-9722
+1060;558431-7167;Princesa Isabel Vinhos;Estrada da saúde n. 58;Lisboa;;1756;Portugal;(1) 356-5634
+1061;552719-7916;Que Delícia;Rua da Panificadora, 12;Rio de Janeiro;RJ;02389-673;Brazil;(21) 555-4252
+1062;556077-8507;Queen Cozinha;Alameda dos Canàrios, 891;São Paulo;SP;05487-020;Brazil;(11) 555-1189
+1063;558815-6652;QUICK-Stop;Taucherstraße 10;Cunewalde;;01307;Germany;0372-035188
+1064;551025-8097;Rancho grande;Av. del Libertador 900;Buenos Aires;;1010;Argentina;(1) 123-5555
+1065;553532-0187;Rattlesnake Canyon Grocery;2817 Milton Dr.;Albuquerque;NM;87110;USA;(505) 555-5939
+1066;559893-9204;Reggiani Caseifici;Strada Provinciale 124;Reggio Emilia;;42100;Italy;0522-556721
+1067;558105-0563;Ricardo Adocicados;Av. Copacabana, 267;Rio de Janeiro;RJ;02389-890;Brazil;(21) 555-3412
+1068;557592-4963;Richter Supermarkt;Grenzacherweg 237;Genève;;1203;Switzerland;0897-034214
+1069;553052-2845;Romero y tomillo;Gran Vía, 1;Madrid;;28001;Spain;(91) 745 6200
+1070;552649-3431;Santé Gourmet;Erling Skakkes gate 78;Stavern;;4110;Norway;07-98 92 35
+1071;554386-0570;Save-a-lot Markets;187 Suffolk Ln.;Boise;ID;83720;USA;(208) 555-8097
+1072;556192-3474;Seven Seas Imports;90 Wadhurst Rd.;London;;OX15 4NB;UK;(171) 555-1717
+1073;559981-7656;Simons bistro;Vinbæltet 34;København;;1734;Denmark;31 12 34 56
+1074;557085-2284;Spécialités du monde;25, rue Lauriston;Paris;;75016;France;(1) 47.55.60.10
+1075;559334-4699;Split Rail Beer & Ale;P.O. Box 555;Lander;WY;82520;USA;(307) 555-4680
+1076;554382-6746;Suprêmes délices;Boulevard Tirou, 255;Charleroi;;B-6000;Belgium;(071) 23 67 22 20
+1077;559923-7129;The Big Cheese;89 Jefferson Way, Suite 2;Portland;OR;97201;USA;(503) 555-3612
+1078;555161-5254;The Cracker Box;55 Grizzly Peak Rd.;Butte;MT;59801;USA;(406) 555-5834
+1079;552999-3148;Toms Spezialitäten;Luisenstr. 48;Münster;;44087;Germany;0251-031259
+1080;553295-8567;Tortuga Restaurante;Avda. Azteca 123;México D.F.;;05033;Mexico;(5) 555-2933
+1081;557795-8852;Tradição Hipermercados;Av. Inês de Castro, 414;São Paulo;SP;05634-030;Brazil;(11) 555-2167
+1082;553858-4755;Trail's Head Gourmet Provisioners;722 DaVinci Blvd.;Kirkland;WA;98034;USA;(206) 555-8257
+1083;552151-9388;Vaffeljernet;Smagsløget 45;Århus;;8200;Denmark;86 21 32 43
+1084;555588-0987;Victuailles en stock;2, rue du Commerce;Lyon;;69004;France;78.32.54.86
+1085;558295-9390;Vins et alcools Chevalier;59 rue de l'Abbaye;Reims;;51100;France;26.47.15.10
+1086;557618-2488;Die Wandernde Kuh;Adenauerallee 900;Stuttgart;;70563;Germany;0711-020361
+1087;556514-5454;Wartian Herkku;Torikatu 38;Oulu;;90110;Finland;981-443655
+1088;556164-5531;Wellington Importadora;Rua do Mercado, 12;Resende;SP;08737-363;Brazil;(14) 555-8122
+1089;556710-2974;White Clover Markets;305 - 14th Ave. S. Suite 3B;Seattle;WA;98128;USA;(206) 555-4112
+1090;558998-1520;Wilman Kala;Keskuskatu 45;Helsinki;;21240;Finland;90-224 8858
+1091;558210-2611;Wolski  Zajazd;ul. Filtrowa 68;Warszawa;;01-012;Poland;(26) 642-7012

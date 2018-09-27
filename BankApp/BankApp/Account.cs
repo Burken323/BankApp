@@ -9,11 +9,16 @@ namespace BankApp
     class Account
     {
         public int accountNumber { get; set; }
-        public int customerNumber { get; set; }
-        public Dictionary<int, decimal> balance;
+        public int customerId { get; set; }
+        public decimal balance { get; set; }
+        public int interest { get; set; }
+        public int credit { get; set; }
 
-        public Account()
+        public Account(int accNum, int custId, decimal bal)
         {
+            accountNumber = accNum;
+            customerId = custId;
+            balance = bal;
 
         }
     }

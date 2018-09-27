@@ -8,16 +8,36 @@ namespace BankApp
 {
     class Customer
     {
-        public string customerNumber { get; set; }
-        public string organizationName { get; set; }
+        public int id { get; set; }
         public string organizationNumber { get; set; }
-        public string zipCode { get; set; }
-        public string address { get; set; }
+        public string organizationName { get; set; }
+        public string orgAddress { get; set; }
+        public string orgCity { get; set; }
+        public string orgRegion { get; set; }
+        public string orgZipCode { get; set; }
+        public string orgCountry { get; set; }
+        public string orgPhoneNumber { get; set; }
+
         public Dictionary<string, Account> accounts;
-        
+        public Dictionary<int, Transaction> transactions;
+
         public Customer()
         {
-            throw new NotImplementedException();
+
+        }
+        
+        public Customer( int idNum, string orgNumber, string orgName, string address, string city, string region, string zipcode, string country, string phoneNum)
+        {
+            id = idNum;
+            organizationNumber = orgNumber;
+            organizationName = orgName;
+            orgAddress = address;
+            orgCity = city;
+            orgRegion = region;
+            orgZipCode = zipcode;
+            orgCountry = country;
+            orgPhoneNumber = phoneNum;
+
         }
 
         
