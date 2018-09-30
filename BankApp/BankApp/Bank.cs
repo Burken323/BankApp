@@ -53,76 +53,122 @@ namespace BankApp
             while (true)
             {
                 string userInput = Console.ReadLine();
-
-                int number = int.Parse(userInput);
-                
-                if (number == 0)
+                if (userInput.Length >= 1)
                 {
-                    Console.WriteLine("  ** Saving data to file.. **  ");
-                    db.SaveData();
 
-                    Console.WriteLine("  ** Exiting program. **  ");
-                    //Save data into different file and exit.
-                    Console.ReadLine();
-                    Environment.Exit(0);
-                }
-                if (userInput[0].Equals("1"))
-                {
-                    //Search/Choose customer.
-                    Console.WriteLine(" * Search customer. *");
-                    Console.Write(" * Name or zipcode: ");
+                    if (userInput[0].Equals('0'))
+                    {
+                        Console.WriteLine("  ** Saving data to file.. **  ");
+                        db.SaveData();
 
-                }
-                if (userInput[0].Equals("2"))
-                {
-                    //Show full customer info.
-                    Console.WriteLine(" * Show customerimage. * ");
-                    Console.Write(" * Customerid: ");
+                        Console.WriteLine("  ** Exiting program. **  ");
+                        //Save data into different file and exit.
+                        Console.ReadLine();
+                        Environment.Exit(0);
+                    }
+                    if (userInput[0].Equals('1'))
+                    {
+                        //Search/Choose customer.
+                        Console.WriteLine(" * Search customer. *");
+                        Console.Write(" * Name or zipcode: ");
+                        string cust = Console.ReadLine();
+                        var findCust = from customer in db.customers
+                                    where customer.Value.organizationName.Contains(cust) || customer.Value.orgZipCode == cust
+                                    select customer;
+                        if (!cust.Equals(""))
+                        {
+                            foreach (var item in findCust)
+                            {
+                                Console.Write(item.Value.id + " | " + item.Value.organizationName + "\r\n");
+                            }
+                        }
+                    }
+                    if (userInput[0].Equals('2'))
+                    {
+                        //Show full customer info.
+                        Console.WriteLine(" * Show customerimage. * ");
+                        Console.Write(" * Customerid: ");
+                        string cust = Console.ReadLine();
+                        Console.WriteLine();
+                        if (int.TryParse(cust, out int custID))
+                        {
+                            var findCust = from customer in db.customers
+                                           where custID == customer.Value.id
+                                           select customer;
+                            foreach (var item in findCust)
+                            {
+                                Console.WriteLine("Customer ID: " + item.Value.id);
+                                Console.WriteLine("Organization number: " + item.Value.organizationNumber);
+                                Console.WriteLine("Name: " + item.Value.organizationName);
+                                Console.WriteLine("Address: " + item.Value.orgAddress);
+                            }
+                            Console.WriteLine();
+                            Console.WriteLine("Accounts: ");
+                            var findAccounts = from account in db.accounts
+                                               where account.Value.customerId == custID
+                                               select account;
+                            foreach (var item in findAccounts)
+                            {
+                                Console.WriteLine(item.Value.accountNumber + ": " + item.Value.balance);
+                            }
+
+                        }
+
+                    }
+                    if (userInput[0].Equals('3'))
+                    {
+                        //Create new customer.
+                        Console.WriteLine(" * Create new customer. *");
+                        db.AddCustomer();
 
 
-                }
-                if (userInput[0].Equals("3"))
-                {
-                    //Create new customer.
-                    Console.WriteLine(" * Create new customer. *");
-                    
+                    }
+                    if (userInput[0].Equals('4'))
+                    {
+                        //Remove customer from bank.
+                        Console.WriteLine(" * Remove customer from bank. *");
+                        Console.Write(" * Customerid: ");
+                        string id = Console.ReadLine();
+                        if(int.TryParse(id, out int custId))
+                        {
+                            db.RemoveCustomer(custId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("The customer ID only contains numbers.");
+                        }
 
-                }
-                if (userInput[0].Equals("4"))
-                {
-                    //Remove customer from bank.
-                    Console.WriteLine(" * Remove customer from bank. *");
-                    Console.Write(" * Customerid: ");
-
-                }
-                if (userInput[0].Equals("5"))
-                {
-                    //Create new account.
-                    Console.WriteLine(" * Create new account. * ");
+                    }
+                    if (userInput[0].Equals('5'))
+                    {
+                        //Create new account.
+                        Console.WriteLine(" * Create new account. * ");
 
 
-                }
-                if (userInput[0].Equals("6"))
-                {
-                    //Remove account from bank
-                    Console.WriteLine(" * Remove account from bank. * ");
-                    Console.Write(" * Accountid: ");
+                    }
+                    if (userInput[0].Equals('6'))
+                    {
+                        //Remove account from bank
+                        Console.WriteLine(" * Remove account from bank. * ");
+                        Console.Write(" * Accountid: ");
 
-                }
-                if (userInput[0].Equals("7"))
-                {
-                    //Deposit.
-                    Console.WriteLine(" * Deposit.");
-                }
-                if (userInput[0].Equals("8"))
-                {
-                    //Withdraw.
-                    Console.WriteLine(" * Withdraw. * ");
-                }
-                if (userInput[0].Equals("9"))
-                {
-                    //Transfer.
-                    Console.WriteLine(" * Transfer. *");
+                    }
+                    if (userInput[0].Equals('7'))
+                    {
+                        //Deposit.
+                        Console.WriteLine(" * Deposit.");
+                    }
+                    if (userInput[0].Equals('8'))
+                    {
+                        //Withdraw.
+                        Console.WriteLine(" * Withdraw. * ");
+                    }
+                    if (userInput[0].Equals('9'))
+                    {
+                        //Transfer.
+                        Console.WriteLine(" * Transfer. *");
+                    }
+                    Console.WriteLine();
                 }
             }
         }

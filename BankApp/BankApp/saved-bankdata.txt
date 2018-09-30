@@ -1,4 +1,4 @@
-91
+92
 1001;557161-2299;Alfreds Futterkiste;Obere Str. 57;Berlin;;12209;Germany;030-0074321
 1002;554950-3281;Ana Trujillo Emparedados y helados;Avda. de la Constitución 2222;México D.F.;;05021;Mexico;(5) 555-4729
 1003;552637-6180;Antonio Moreno Taquería;Mataderos  2312;México D.F.;;05023;Mexico;(5) 555-3932
@@ -90,6 +90,7 @@
 1089;556710-2974;White Clover Markets;305 - 14th Ave. S. Suite 3B;Seattle;WA;98128;USA;(206) 555-4112
 1090;558998-1520;Wilman Kala;Keskuskatu 45;Helsinki;;21240;Finland;90-224 8858
 1091;558210-2611;Wolski  Zajazd;ul. Filtrowa 68;Warszawa;;01-012;Poland;(26) 642-7012
+1092;940809-5553;Gabriel AB;Kyrkvägen 16A;Täby;STHM;187-70;Sweden;072-242 83 01
 382
 13001;1001;814,50
 13002;1001;878,00

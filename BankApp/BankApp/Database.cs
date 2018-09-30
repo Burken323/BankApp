@@ -12,6 +12,8 @@ namespace BankApp
     {
         public int numberOfCust { get; set; }
         public int numberOfAcc { get; set; }
+        //currentEditDate
+        //latestEditDate
         public Dictionary<int, Customer> customers;
         public Dictionary<int, Account> accounts;
 
@@ -83,7 +85,7 @@ namespace BankApp
 
             using (var writer = new StreamWriter(@"C:\Users\gabbe\source\repos\BankApp\BankApp\BankApp\saved-bankdata.txt"))
             {
-                writer.WriteLine(numberOfCust);
+                writer.WriteLine(numberOfCust.ToString());
                 
                 string line = "";
                 foreach (var item in customers)
@@ -100,11 +102,10 @@ namespace BankApp
                         item.Value.orgCountry,
                         item.Value.orgPhoneNumber
                     });
-                    Console.WriteLine(line);
                     writer.WriteLine(line);
                 }
 
-                writer.WriteLine(numberOfAcc);
+                writer.WriteLine(numberOfAcc.ToString());
                 foreach (var item in accounts)
                 {
                     line = string.Join(";", new string[]
@@ -113,7 +114,6 @@ namespace BankApp
                         item.Value.customerId.ToString(),
                         item.Value.balance.ToString()
                     });
-                    Console.WriteLine(line);
                     writer.WriteLine(line);
 
                 }
@@ -125,12 +125,43 @@ namespace BankApp
 
         public void AddCustomer()
         {
-            throw new NotImplementedException();
+            int latestCust = (from customer in customers
+                              select customer.Value.id).Max();
+            int id = latestCust + 1;
+            Console.Write("Organization number: ");
+            string orgNum = Console.ReadLine();
+            Console.Write("Organization name: ");
+            string orgName = Console.ReadLine();
+            Console.Write("Organization address: ");
+            string orgAddress = Console.ReadLine();
+            Console.Write("Organization city: ");
+            string orgCity = Console.ReadLine();
+            Console.Write("Organization Region: ");
+            string orgReg = Console.ReadLine();
+            Console.Write("Organization zipcode: ");
+            string orgZip = Console.ReadLine();
+            Console.Write("Organization country: ");
+            string orgCountry = Console.ReadLine();
+            Console.Write("Organization phonenumber: ");
+            string orgPhone = Console.ReadLine();
+            Console.WriteLine();
+            customers.Add(id, new Customer(id, orgNum, orgName, orgAddress, orgCity, orgReg, orgZip, orgCountry, orgPhone));
+            numberOfCust++;
+            Console.WriteLine(" **  Customer added  ** ");
+            
         }
 
-        public void RemoveCustomer()
+        public void RemoveCustomer(int id)
         {
-            throw new NotImplementedException();
+            var keys = customers.Keys;
+            if (keys.Contains(id))
+            {
+                customers.Remove(id);
+            }
+            else
+            {
+                Console.WriteLine("Could not find customer.");
+            }
         }
 
         public void AddAccount()
