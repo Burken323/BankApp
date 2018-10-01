@@ -117,10 +117,7 @@ namespace BankApp
                     writer.WriteLine(line);
 
                 }
-                
             }
-             
-            
         }
 
         public void AddCustomer()
@@ -166,12 +163,38 @@ namespace BankApp
 
         public void AddAccount()
         {
-            throw new NotImplementedException();
+            Console.Write(" * Customer ID: ");
+            string cust = Console.ReadLine();
+            if (int.TryParse(cust, out int custID))
+            {
+                var findCust = (from customer in customers
+                               where customer.Value.id == custID
+                               select customer).Count();
+                if(findCust == 1)
+                {
+                    int latestAccount = (from account in accounts
+                                        select account.Value.accountNumber).Max();
+                    accounts.Add(latestAccount + 1, new Account(latestAccount + 1, custID, 0));
+                }
+            }
+            else
+            {
+                Console.WriteLine("Could not find that customer.");
+            }
         }
 
-        public void RemoveAccount()
+        public void RemoveAccount(int id)
         {
-            throw new NotImplementedException();
+            var keys = accounts.Keys;
+            
+            if (keys.Contains(id) && accounts[id].balance == 0)
+            {
+                accounts.Remove(id);
+            }
+            else
+            {
+                Console.WriteLine("Account still contains currency.");
+            }
         }
     }
 }

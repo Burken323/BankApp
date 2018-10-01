@@ -113,6 +113,10 @@ namespace BankApp
                             }
 
                         }
+                        else
+                        {
+                            Console.WriteLine("Could not find the customer you were looking for.");
+                        }
 
                     }
                     if (userInput[0].Equals('3'))
@@ -131,7 +135,18 @@ namespace BankApp
                         string id = Console.ReadLine();
                         if(int.TryParse(id, out int custId))
                         {
-                            db.RemoveCustomer(custId);
+                            int accountNum = (from account in db.accounts
+                                            where account.Value.customerId == custId
+                                            select account).Count();
+                            
+                            if (accountNum == 0)
+                            {
+                                db.RemoveCustomer(custId);
+                            }
+                            else
+                            {
+                                Console.WriteLine("That customer still has accounts with us.");
+                            }
                         }
                         else
                         {
@@ -143,6 +158,7 @@ namespace BankApp
                     {
                         //Create new account.
                         Console.WriteLine(" * Create new account. * ");
+                        db.AddAccount();
 
 
                     }
@@ -150,7 +166,26 @@ namespace BankApp
                     {
                         //Remove account from bank
                         Console.WriteLine(" * Remove account from bank. * ");
-                        Console.Write(" * Accountid: ");
+                        Console.Write(" * Customer ID: ");
+                        string id = Console.ReadLine();
+                        if(int.TryParse(id, out int custID))
+                        {
+                            int findCust = (from customer in db.customers
+                                            where customer.Value.id == custID
+                                            select customer).Count();
+                            if(findCust == 1)
+                            {
+                                Console.Write(" * Account ID: ");
+                                string acc = Console.ReadLine();
+                                if (int.TryParse(acc, out int accID))
+                                {
+                                    var selAccount = (from account in db.accounts
+                                                     where account.Value.accountNumber == accID
+                                                     select account).ToList();
+                                    db.RemoveAccount(selAccount[0].Value.accountNumber);
+                                }
+                            }
+                        }
 
                     }
                     if (userInput[0].Equals('7'))
