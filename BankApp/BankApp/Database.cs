@@ -125,27 +125,43 @@ namespace BankApp
             int latestCust = (from customer in customers
                               select customer.Value.id).Max();
             int id = latestCust + 1;
-            Console.Write("Organization number: ");
-            string orgNum = Console.ReadLine();
-            Console.Write("Organization name: ");
-            string orgName = Console.ReadLine();
-            Console.Write("Organization address: ");
-            string orgAddress = Console.ReadLine();
-            Console.Write("Organization city: ");
-            string orgCity = Console.ReadLine();
-            Console.Write("Organization Region: ");
-            string orgReg = Console.ReadLine();
-            Console.Write("Organization zipcode: ");
-            string orgZip = Console.ReadLine();
-            Console.Write("Organization country: ");
-            string orgCountry = Console.ReadLine();
-            Console.Write("Organization phonenumber: ");
-            string orgPhone = Console.ReadLine();
             Console.WriteLine();
-            customers.Add(id, new Customer(id, orgNum, orgName, orgAddress, orgCity, orgReg, orgZip, orgCountry, orgPhone));
-            numberOfCust++;
-            Console.WriteLine(" **  Customer added  ** ");
-            
+            Console.WriteLine("Fields that must be filled are marked with '*'");
+            Console.Write("Organization number*: ");
+            string orgNum = Console.ReadLine();
+            Console.Write("Organization name*: ");
+            string orgName = Console.ReadLine();
+            Console.Write("Organization address*: ");
+            string orgAddress = Console.ReadLine();
+            Console.Write("Organization city*: ");
+            string orgCity = Console.ReadLine();
+            Console.Write("Organization zipcode*: ");
+            string orgZip = Console.ReadLine();
+            if (orgNum.Length > 0 && orgName.Length > 0 && orgAddress.Length > 0 && orgCity.Length > 0 && orgZip.Length > 0)
+            {
+                Console.Write("Organization Region: ");
+                string orgReg = Console.ReadLine();
+                Console.Write("Organization country: ");
+                string orgCountry = Console.ReadLine();
+                Console.Write("Organization phonenumber: ");
+                string orgPhone = Console.ReadLine();
+                Console.WriteLine();
+                customers.Add(id, new Customer(id, orgNum, orgName, orgAddress, orgCity, orgReg, orgZip, orgCountry, orgPhone));
+                numberOfCust++;
+                Console.WriteLine(" **  Customer " + id.ToString() + " added  ** ");
+                int latestAccount = (from account in accounts
+                                     select account.Value.accountNumber).Max();
+                accounts.Add(latestAccount + 1, new Account(latestAccount + 1, id, 0));
+                numberOfAcc++;
+                Console.WriteLine();
+                Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + id + ". **");
+            }
+            else
+            {
+                Console.WriteLine(" ** Error! Missing input.. ** ");
+                Console.WriteLine(" * Customer was not created * ");
+            }
+
         }
 
         public void RemoveCustomer(int id)
@@ -154,6 +170,9 @@ namespace BankApp
             if (keys.Contains(id))
             {
                 customers.Remove(id);
+                numberOfCust--;
+                Console.WriteLine();
+                Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
             }
             else
             {
@@ -175,6 +194,9 @@ namespace BankApp
                     int latestAccount = (from account in accounts
                                         select account.Value.accountNumber).Max();
                     accounts.Add(latestAccount + 1, new Account(latestAccount + 1, custID, 0));
+                    numberOfAcc++;
+                    Console.WriteLine();
+                    Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + cust + ". **");
                 }
             }
             else
@@ -190,6 +212,9 @@ namespace BankApp
             if (keys.Contains(id) && accounts[id].balance == 0)
             {
                 accounts.Remove(id);
+                numberOfAcc--;
+                Console.WriteLine();
+                Console.WriteLine(" ** Account removed from customer " + id.ToString() + ". ** ");
             }
             else
             {

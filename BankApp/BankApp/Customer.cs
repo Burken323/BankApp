@@ -17,9 +17,7 @@ namespace BankApp
         public string orgZipCode { get; set; }
         public string orgCountry { get; set; }
         public string orgPhoneNumber { get; set; }
-
-        public Dictionary<string, Account> accounts;
-        public Dictionary<int, Transaction> transactions;
+        
 
         public Customer()
         {
