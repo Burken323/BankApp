@@ -10,10 +10,8 @@ namespace BankApp
 {
     class Database
     {
-        public int numberOfCust { get; set; }
-        public int numberOfAcc { get; set; }
-        //currentEditDate
-        //latestEditDate
+        public int CustomerCount { get; set; }
+        public int AccountCount { get; set; }
         public Dictionary<int, Customer> customers;
         public Dictionary<int, Account> accounts;
 
@@ -25,14 +23,13 @@ namespace BankApp
 
         public void GetData()
         {
-
             using (var data = new StreamReader("bankdata.txt"))
             {
                 string[] line = data.ReadLine().Split(';');
                 
                 if(int.TryParse(line[0], out int numOfCust))
                 {
-                    numberOfCust = numOfCust;
+                    CustomerCount = numOfCust;
                     line = GetCustomers(data, line, numOfCust);
                 }
                 else
@@ -44,7 +41,7 @@ namespace BankApp
 
                 if (int.TryParse(line[0], out int numOfAcc))
                 {
-                    numberOfAcc = numOfAcc;
+                    AccountCount = numOfAcc;
                     line = GetAccounts(data, line, numOfAcc);
                 }
                 else
@@ -63,7 +60,6 @@ namespace BankApp
                 Customer cust = new Customer(tempId, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8]);
                 customers.Add(tempId, cust);
             }
-
             return line;
         }
 
@@ -76,7 +72,6 @@ namespace BankApp
                 Account acc = new Account(tempId, int.Parse(line[1]), decimal.Parse(line[2], CultureInfo.InvariantCulture));
                 accounts.Add(tempId, acc);
             }
-
             return line;
         }
 
@@ -85,7 +80,7 @@ namespace BankApp
             string date = DateTime.Now.ToString("yyyyMMdd-HHmm") + ".txt";
             using (var writer = new StreamWriter(date))
             {
-                writer.WriteLine(numberOfCust.ToString());
+                writer.WriteLine(CustomerCount.ToString());
                 
                 string line = "";
                 foreach (var item in customers)
@@ -105,17 +100,51 @@ namespace BankApp
                     writer.WriteLine(line);
                 }
 
-                writer.WriteLine(numberOfAcc.ToString());
+                writer.WriteLine(AccountCount.ToString());
                 foreach (var item in accounts)
                 {
                     line = string.Join(";", new string[]
                     {
-                        item.Value.accountNumber.ToString(),
-                        item.Value.customerId.ToString(),
-                        item.Value.balance.ToString()
+                        item.Value.AccountNumber.ToString(),
+                        item.Value.CustomerId.ToString(),
+                        item.Value.Balance.ToString()
                     });
                     writer.WriteLine(line);
+                }
+            }
+            SaveTransactions();
+        }
 
+        private void SaveTransactions()
+        {
+            string fileName = "Transactions-" + DateTime.Now.ToString("yyyyMMdd-HHmm") + ".txt";
+            using(var writer = new StreamWriter(fileName))
+            {
+                var transactionCount = (from account in accounts
+                                       where account.Value.transactions.Count > 0
+                                       select account.Value.transactions.Count).Sum();
+                writer.WriteLine(transactionCount.ToString());
+
+                var accountWithHistory = from account in accounts
+                                         where account.Value.transactions.Count > 0
+                                         select account.Value.transactions;
+                string line = "";
+
+                foreach (var item in accountWithHistory)
+                {
+                    for (int i = 0; i < item.Count; i++)
+                    {
+                        line = String.Join(";", new string[]
+                        {
+                            item[i].Date,
+                            item[i].Sender.ToString(),
+                            item[i].Reciever.ToString(),
+                            item[i].Amount.ToString(),
+                            item[i].CurrentBalance.ToString(),
+                            item[i].Type
+                        });
+                        writer.WriteLine(line);
+                    }
                 }
             }
         }
@@ -137,7 +166,8 @@ namespace BankApp
             string orgCity = Console.ReadLine();
             Console.Write("Organization zipcode*: ");
             string orgZip = Console.ReadLine();
-            if (orgNum.Length > 0 && orgName.Length > 0 && orgAddress.Length > 0 && orgCity.Length > 0 && orgZip.Length > 0)
+            if (!String.IsNullOrWhiteSpace(orgNum) && !String.IsNullOrWhiteSpace(orgName) && !String.IsNullOrWhiteSpace(orgAddress) 
+                    && !String.IsNullOrWhiteSpace(orgCity) && !String.IsNullOrWhiteSpace(orgZip))
             {
                 Console.Write("Organization Region: ");
                 string orgReg = Console.ReadLine();
@@ -147,7 +177,7 @@ namespace BankApp
                 string orgPhone = Console.ReadLine();
                 Console.WriteLine();
                 customers.Add(id, new Customer(id, orgNum, orgName, orgAddress, orgCity, orgReg, orgZip, orgCountry, orgPhone));
-                numberOfCust++;
+                CustomerCount++;
                 Console.WriteLine(" **  Customer " + id.ToString() + " added  ** ");
                 CreateAccountForNewCust(id);
             }
@@ -162,9 +192,9 @@ namespace BankApp
         private void CreateAccountForNewCust(int id)
         {
             int latestAccount = (from account in accounts
-                                 select account.Value.accountNumber).Max();
+                                 select account.Value.AccountNumber).Max();
             accounts.Add(latestAccount + 1, new Account(latestAccount + 1, id, 0));
-            numberOfAcc++;
+            AccountCount++;
             Console.WriteLine();
             Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + id + ". **");
         }
@@ -172,12 +202,22 @@ namespace BankApp
         public void RemoveCustomer(int id)
         {
             var keys = customers.Keys;
+            var getBalance = (from account in accounts
+                               where account.Value.CustomerId == id
+                               select account.Value.Balance).Sum();
             if (keys.Contains(id))
             {
-                customers.Remove(id);
-                numberOfCust--;
-                Console.WriteLine();
-                Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
+                if (getBalance == 0)
+                {
+                    customers.Remove(id);
+                    CustomerCount--;
+                    Console.WriteLine();
+                    Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
+                }
+                else
+                {
+                    Console.WriteLine(" * Customer still has an account with balance left on it. * ");
+                }
             }
             else
             {
@@ -197,9 +237,9 @@ namespace BankApp
                 if(findCust == 1)
                 {
                     int latestAccount = (from account in accounts
-                                        select account.Value.accountNumber).Max();
+                                        select account.Value.AccountNumber).Max();
                     accounts.Add(latestAccount + 1, new Account(latestAccount + 1, custID, 0));
-                    numberOfAcc++;
+                    AccountCount++;
                     Console.WriteLine();
                     Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + cust + ". **");
                 }
@@ -214,10 +254,10 @@ namespace BankApp
         {
             var keys = accounts.Keys;
             
-            if (keys.Contains(id) && accounts[id].balance == 0)
+            if (keys.Contains(id) && accounts[id].Balance == 0)
             {
                 accounts.Remove(id);
-                numberOfAcc--;
+                AccountCount--;
                 Console.WriteLine();
                 Console.WriteLine(" ** Account removed from customer " + id.ToString() + ". ** ");
             }

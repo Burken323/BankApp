@@ -17,13 +17,9 @@ namespace BankApp
         public string OrganizationZipCode { get; set; }
         public string OrganizationCountry { get; set; }
         public string OrganizationPhoneNumber { get; set; }
-        
 
-        public Customer()
-        {
+        public Customer() { }
 
-        }
-        
         public Customer( int id, string orgNumber, string orgName, string orgAddress, string orgCity, string orgRegion, 
                             string orgZipcode, string orgCountry, string orgPhoneNum)
         {
@@ -36,9 +32,6 @@ namespace BankApp
             OrganizationZipCode = orgZipcode;
             OrganizationCountry = orgCountry;
             OrganizationPhoneNumber = orgPhoneNum;
-
         }
-
-        
     }
 }

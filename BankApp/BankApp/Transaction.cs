@@ -8,21 +8,21 @@ namespace BankApp
 {
     class Transaction
     {
-        public string date { get; set; }
-        public int sender { get; set; }
-        public int reciever { get; set; }
-        public decimal amount { get; set; }
-        public decimal currentBalance { get; set; }
-        public string type { get; set; }
+        public string Date { get; set; }
+        public int Sender { get; set; }
+        public int Reciever { get; set; }
+        public decimal Amount { get; set; }
+        public decimal CurrentBalance { get; set; }
+        public string Type { get; set; }
 
         public Transaction(string dateOfTransfer, int senderID, int recieverID, decimal currency, decimal currBalance, string typeOfTransfer)
         {
-            date = dateOfTransfer;
-            sender = senderID;
-            reciever = recieverID;
-            amount = currency;
-            currentBalance = currBalance;
-            type = typeOfTransfer;
+            Date = dateOfTransfer;
+            Sender = senderID;
+            Reciever = recieverID;
+            Amount = currency;
+            CurrentBalance = currBalance;
+            Type = typeOfTransfer;
         }
     }
 }
