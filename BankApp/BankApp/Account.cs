@@ -23,6 +23,7 @@ namespace BankApp
             Balance = bal;
             Interest = 0.05M;
             Credit = 10000;
+            DebtInterest = 0;
             transactions = new List<Transaction>();
         }
 
@@ -38,6 +39,11 @@ namespace BankApp
             }
         }
 
+        public void SetDebtInterest()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetInterest()
         {
             Console.WriteLine(" * Current interest for this account is: " + Interest + ". * ");
@@ -45,8 +51,15 @@ namespace BankApp
             string newInterest = Console.ReadLine();
             if(decimal.TryParse(newInterest, out decimal interest))
             {
-                Interest = interest;
-                Console.WriteLine(" * Interest set to: " + Interest + ". * ");
+                if (Balance < 0)
+                {
+                    DebtInterest = -Balance * 0.01M;
+                }
+                else
+                {
+                    Interest = interest;
+                    Console.WriteLine(" * Interest set to: " + Interest + ". * ");
+                }
             }
         }
 
@@ -63,25 +76,29 @@ namespace BankApp
             }
         }
 
-        public void Withdraw(decimal currency)
+        public bool Withdraw(decimal currency)
         {
             if(Balance < 0)
             {
                 Console.WriteLine(" * You cannot withdraw anymore from this account right now. * ");
+                return false;
             }
-            else if(Balance < currency || (Balance - currency) > (-Credit))
+            else if (currency < 0)
+            {
+                Console.WriteLine(" ** Cannot withdraw a negative value. ** ");
+                return false;
+            }
+            else if((Balance - currency) < (-Credit))
             {
                 Console.WriteLine(" ** Insufficient credits on account. ** ");
                 Console.WriteLine(" ** Current balance: " + Balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
-            }
-            else if(currency < 0)
-            {
-                Console.WriteLine(" ** Cannot withdraw a negative value. ** ");
+                return false;
             }
             else
             {
                 Balance -= decimal.Add(currency, 0.00M);
                 Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
+                return true;
             }
         }
     }

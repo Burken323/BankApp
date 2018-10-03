@@ -131,6 +131,9 @@ namespace BankApp
             foreach (var item in getAccounts)
             {
                 item.Balance += item.Balance * item.Interest;
+                item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
+                                                            item.AccountNumber, decimal.Add((item.Balance * item.Interest), 0.00M), 
+                                                                item.Balance, "Interest"));
             }
             Console.WriteLine(" * Interest added to all accounts. * ");
             Console.WriteLine();
@@ -279,9 +282,11 @@ namespace BankApp
                             string amount = Console.ReadLine();
                             if (decimal.TryParse(amount, out decimal currency))
                             {
-                                findAcc.Withdraw(currency);
-                                findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
-                                                            findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Withdrawal"));
+                                if (findAcc.Withdraw(currency))
+                                {
+                                    findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
+                                                                findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Withdrawal"));
+                                }
                             }
                             else
                             {
@@ -363,14 +368,14 @@ namespace BankApp
                                         {
                                             Console.WriteLine(" * You cannot withdraw anymore from this account right now. * ");
                                         }
-                                        else if (findAcc.Balance < currency || (findAcc.Balance - currency) > (-Credit))
-                                        {
-                                            Console.WriteLine(" ** Insufficient credits on account. ** ");
-                                            Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
-                                        }
                                         else if (currency < 0)
                                         {
                                             Console.WriteLine(" * Cannot transfer negative numbers. * ");
+                                        }
+                                        else if ((findAcc.Balance - currency) < (-findAcc.Credit))
+                                        {
+                                            Console.WriteLine(" ** Insufficient credits on account. ** ");
+                                            Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
                                         }
                                         else if (findAcc.Balance < currency)
                                         {
