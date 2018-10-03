@@ -32,7 +32,7 @@ namespace BankApp
             else
             {
                 balance += decimal.Add(currency, 0.00M);
-                Console.WriteLine(" * Current balance in account: " + accountNumber + " has changed to: " + balance);
+                Console.WriteLine(" * Current balance in account: " + accountNumber + ", has changed to: " + balance);
             }
 
         }
@@ -42,6 +42,7 @@ namespace BankApp
             if(balance < currency)
             {
                 Console.WriteLine(" ** Insufficient credits on account. ** ");
+                Console.WriteLine(" ** Current balance: " + balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
             }
             else if(currency < 0)
             {
@@ -50,7 +51,7 @@ namespace BankApp
             else
             {
                 balance -= decimal.Add(currency, 0.00M);
-                Console.WriteLine(" * Current balance in account: " + accountNumber + " has changed to: " + balance);
+                Console.WriteLine(" * Current balance in account: " + accountNumber + ", has changed to: " + balance);
             }
         }
     }

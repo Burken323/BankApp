@@ -19,7 +19,76 @@ namespace BankApp
 
         public void BankOpen()
         {
-            
+            PrintMenu();
+            while (true)
+            {
+                string userInput = Console.ReadLine();
+                if (userInput.Length >= 1)
+                {
+
+                    if (userInput.Equals("0"))
+                    {
+                        //Save the data and exit the application.
+                        SaveAndExit();
+                    }
+                    if (userInput.Equals("1"))
+                    {
+                        //Search customer.
+                        SearchCustomer();
+                    }
+                    if (userInput.Equals("2"))
+                    {
+                        //Show full customer info.
+                        ShowCustomerImage();
+                    }
+                    if (userInput.Equals("3"))
+                    {
+                        //Create new customer.
+                        Console.WriteLine(" * Create new customer. *");
+                        db.AddCustomer();
+                    }
+                    if (userInput.Equals("4"))
+                    {
+                        //Remove customer from bank.
+                        RemoveCustFromBank();
+                    }
+                    if (userInput.Equals("5"))
+                    {
+                        //Create new account.
+                        Console.WriteLine(" * Create new account. * ");
+                        db.AddAccount();
+                    }
+                    if (userInput.Equals("6"))
+                    {
+                        //Remove account from bank
+                        RemoveAccFromBank();
+                    }
+                    if (userInput.Equals("7"))
+                    {
+                        //Deposit.
+                        DepositFromAccount();
+                    }
+                    if (userInput.Equals("8"))
+                    {
+                        //Withdraw.
+                        WithdrawFromAccount();
+                    }
+                    if (userInput.Equals("9"))
+                    {
+                        //Transfer.
+                        Transfer();
+                    }
+                    if (userInput.Equals("10"))
+                    {
+                        //Get the image for that account.
+                        GetAccountImage();
+                    }
+                }
+            }
+        }
+
+        private void PrintMenu()
+        {
             Console.WriteLine("                                             ");
             Console.WriteLine(" ************************************************* ");
             Console.WriteLine("     $$$//$$$$$$$$$$$$$$//$$$$$$$$$$$$$$$//$   ");
@@ -32,7 +101,7 @@ namespace BankApp
             Console.WriteLine(" ** We currently have: " + db.numberOfCust + " customers. **");
             Console.WriteLine(" ** We currently have: " + db.numberOfAcc + " accounts. **");
             var totalBalance = (from account in db.accounts.Values
-                               select account.balance).Sum();
+                                select account.balance).Sum();
             Console.WriteLine(" ** Total balance: " + totalBalance + ".        **");
             Console.WriteLine(" *************************************************");
             Console.WriteLine("    __________________________________________    ");
@@ -51,329 +120,278 @@ namespace BankApp
             Console.WriteLine("   |[10] Show accountimage.                   |   ");
             Console.WriteLine("   |__________________________________________|   ");
             Console.WriteLine(" *************************************************");
-            while (true)
+        }
+
+        private void DepositFromAccount()
+        {
+            Console.WriteLine(" * Deposit. *");
+            Console.Write(" * Customer ID: ");
+            string cust = Console.ReadLine();
+            if (int.TryParse(cust, out int custID))
             {
-                string userInput = Console.ReadLine();
-                if (userInput.Length >= 1)
+                if (db.customers.ContainsKey(custID))
                 {
-
-                    if (userInput.Equals("0"))
+                    var findCust = (from customer in db.customers
+                                    where customer.Value.id == custID
+                                    select customer).Single();
+                    var accounts = from account in db.accounts
+                                   where custID == account.Value.customerId
+                                   select account.Value;
+                    Console.Write(" * Accounts: | ");
+                    foreach (var item in accounts)
                     {
-                        SaveAndExit();
+                        Console.Write(item.accountNumber + " | ");
                     }
-                    if (userInput.Equals("1"))
+                    Console.Write("\r\n");
+                    Console.Write(" * Account ID: ");
+                    string acc = Console.ReadLine();
+                    if (int.TryParse(acc, out int accID))
                     {
-                        //Search customer.
-                        SearchCustomer();
-                    }
-                    if (userInput.Equals("2"))
-                    {
-                        //Show full customer info.
-                        ShowCustomerImage();
-
-                    }
-                    if (userInput.Equals("3"))
-                    {
-                        //Create new customer.
-                        Console.WriteLine(" * Create new customer. *");
-                        db.AddCustomer();
-
-
-                    }
-                    if (userInput.Equals("4"))
-                    {
-                        //Remove customer from bank.
-                        RemoveCustFromBank();
-
-                    }
-                    if (userInput.Equals("5"))
-                    {
-                        //Create new account.
-                        Console.WriteLine(" * Create new account. * ");
-                        db.AddAccount();
-
-
-                    }
-                    if (userInput.Equals("6"))
-                    {
-                        //Remove account from bank
-                        RemoveAccFromBank();
-
-                    }
-                    if (userInput.Equals("7"))
-                    {
-                        //Deposit.
-                        Console.WriteLine(" * Deposit. *");
-                        Console.Write(" * Customer ID: ");
-                        string cust = Console.ReadLine();
-                        if (int.TryParse(cust, out int custID))
+                        if (db.accounts.ContainsKey(accID))
                         {
-                            if (db.customers.ContainsKey(custID))
+                            var findAcc = (from account in db.accounts
+                                           where account.Value.accountNumber == accID && custID == account.Value.customerId
+                                           select account.Value).Single();
+                            Console.Write(" * Amount: ");
+                            string amount = Console.ReadLine();
+                            if (decimal.TryParse(amount, out decimal currency))
                             {
-                                var findCust = (from customer in db.customers
-                                                where customer.Value.id == custID
-                                                select customer).Single();
-                                var accounts = from account in db.accounts
-                                               where custID == account.Value.customerId
-                                               select account.Value;
-                                Console.Write(" * Accounts: | ");
-                                foreach (var item in accounts)
-                                {
-                                    Console.Write(item.accountNumber + " | ");
-                                }
-                                Console.Write("\r\n");
-                                Console.Write(" * Account ID: ");
-                                string acc = Console.ReadLine();
-                                if (int.TryParse(acc, out int accID))
-                                {
-                                    if (db.accounts.ContainsKey(accID))
-                                    {
-                                        var findAcc = (from account in db.accounts
-                                                       where account.Value.accountNumber == accID && custID == account.Value.customerId
-                                                       select account.Value).Single();
-                                        Console.Write(" * Amount: ");
-                                        string amount = Console.ReadLine();
-                                        if (decimal.TryParse(amount, out decimal currency))
-                                        {
-                                            findAcc.Deposit(currency);
-                                            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Deposit"));
+                                findAcc.Deposit(currency);
+                                findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Deposit"));
 
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine(" * Invalid input. * ");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(" * Could not find account. * ");
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine(" * Invalid input. * ");
-                                }
                             }
                             else
                             {
-                                Console.WriteLine(" * Could not find that customer. * ");
+                                Console.WriteLine(" * Invalid input. * ");
                             }
                         }
                         else
                         {
-                            Console.WriteLine(" * Invalid input. * ");
-                        }
-
-                    }
-                    if (userInput.Equals("8"))
-                    {
-                        //Withdraw.
-                        Console.WriteLine(" * Withdraw. *");
-                        Console.Write(" * Customer ID: ");
-                        string cust = Console.ReadLine();
-                        if (int.TryParse(cust, out int custID))
-                        {
-                            if (db.customers.ContainsKey(custID))
-                            {
-                                var findCust = (from customer in db.customers
-                                                where customer.Value.id == custID
-                                                select customer).Single();
-                                var accounts = from account in db.accounts
-                                               where custID == account.Value.customerId
-                                               select account.Value;
-                                Console.Write(" * Accounts: | ");
-                                foreach (var item in accounts)
-                                {
-                                    Console.Write(item.accountNumber + " | ");
-                                }
-                                Console.Write("\r\n");
-                                Console.Write(" * Account ID: ");
-                                string acc = Console.ReadLine();
-                                if (int.TryParse(acc, out int accID))
-                                {
-                                    if (db.accounts.ContainsKey(accID))
-                                    {
-                                        var findAcc = (from account in db.accounts
-                                                       where account.Value.accountNumber == accID && custID == account.Value.customerId
-                                                       select account.Value).Single();
-                                        Console.Write(" * Amount: ");
-                                        string amount = Console.ReadLine();
-                                        if (decimal.TryParse(amount, out decimal currency))
-                                        {
-                                            findAcc.Withdraw(currency);
-                                            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Withdrawal"));
-
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine(" * Invalid input. * ");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(" * Could not find account. * ");
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine(" * Invalid input. * ");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine(" * Could not find that customer. * ");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine(" * Invalid input. * ");
+                            Console.WriteLine(" * Could not find account. * ");
                         }
                     }
-                    if (userInput.Equals("9"))
+                    else
                     {
-                        //Transfer.
-                        Console.WriteLine(" * Transfer. *");
-                        Console.Write(" * Customer ID: ");
-                        string cust = Console.ReadLine();
-                        if (int.TryParse(cust, out int custID))
-                        {
-                            if (db.customers.ContainsKey(custID))
-                            {
-                                var findCust = (from customer in db.customers
-                                                where customer.Value.id == custID
-                                                select customer).Single();
-                                var accounts = from account in db.accounts
-                                               where custID == account.Value.customerId
-                                               select account.Value;
-                                Console.Write(" * Accounts: | ");
-                                foreach (var item in accounts)
-                                {
-                                    Console.Write(item.accountNumber + " | ");
-                                }
-                                Console.Write("\r\n");
-                                Console.Write(" * From account ID: ");
-                                string fromAcc = Console.ReadLine();
-                                if (int.TryParse(fromAcc, out int fromAccID))
-                                {
-                                    if (db.accounts.ContainsKey(fromAccID))
-                                    {
-                                        var findAcc = (from account in db.accounts
-                                                       where account.Value.accountNumber == fromAccID && custID == account.Value.customerId
-                                                       select account.Value).Single();
-                                        Console.Write(" * To account ID: ");
-                                        string toAcc = Console.ReadLine();
-                                        if (int.TryParse(toAcc, out int toAccID))
-                                        {
-                                            if (db.accounts.ContainsKey(toAccID))
-                                            {
-                                                var findSecAcc = (from account in db.accounts
-                                                                  where account.Value.accountNumber == toAccID
-                                                                  select account.Value).Single();
-                                                Console.Write(" * Amount: ");
-                                                string amount = Console.ReadLine();
-                                                if (decimal.TryParse(amount, out decimal currency))
-                                                {
-                                                    if (currency < 0)
-                                                    {
-                                                        Console.WriteLine(" * Cannot transfer negative numbers. * ");
-                                                    }
-                                                    else
-                                                    {
-                                                        findAcc.balance -= currency;
-                                                        findSecAcc.balance += currency;
-                                                        findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Transfer"));
-                                                        findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findSecAcc.balance, "Transfer"));
-                                                        Console.WriteLine();
-                                                        Console.WriteLine(" * Successfully transferred " + currency + " from " + findAcc.accountNumber + " to " + findSecAcc.accountNumber + " * ");
-                                                        Console.WriteLine();
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine(" * Invalid input. * ");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine(" * Could not find that account. * ");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine(" * Invalid input. * ");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(" * Could not find that account. * ");
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine(" * Invalid input. * ");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine(" * Could not find that customer. * ");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine(" * Invalid input. * ");
-                        }
-                    }
-                    if (userInput.Equals("10"))
-                    {
-                        Console.WriteLine(" * Accountimage * ");
-                        Console.Write(" * Account ID: ");
-                        string acc = Console.ReadLine();
-                        if(int.TryParse(acc, out int accID))
-                        {
-                            if (db.accounts.ContainsKey(accID))
-                            {
-                                var findAcc = (from account in db.accounts
-                                               where accID == account.Value.accountNumber
-                                               select account.Value).Single();
-                                Console.WriteLine();
-                                Console.WriteLine(" * Account ID: " + findAcc.accountNumber);
-                                Console.WriteLine(" * Customer ID: " + findAcc.customerId);
-                                Console.WriteLine(" * Balance: " + findAcc.balance);
-                                Console.WriteLine(" * Transactions: ");
-                                Console.WriteLine();
-                                var getTransfers = (from transaction in findAcc.transactions
-                                                    select transaction).ToList();
-                                if (getTransfers.Count != 0)
-                                {
-                                    foreach (var item in getTransfers)
-                                    {
-                                        Console.WriteLine(" ** " + item.type + " ** ");
-                                        Console.WriteLine(" * Date: " + item.date);
-                                        Console.WriteLine(" * Sender: " + item.sender);
-                                        Console.WriteLine(" * Reciever: " + item.reciever);
-                                        Console.WriteLine(" * Amount: " + item.amount);
-                                        Console.WriteLine(" * Current balance: " + item.currentBalance);
-                                        Console.WriteLine();
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine(" ** No recent activity. ** ");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine(" * Account doesn't exist. *");
-                            }
-
-                        }
-                        else
-                        {
-                            Console.WriteLine(" * Input invalid. * ");
-                        }
+                        Console.WriteLine(" * Invalid input. * ");
                     }
                 }
+                else
+                {
+                    Console.WriteLine(" * Could not find that customer. * ");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
+            }
+        }
+
+        private void WithdrawFromAccount()
+        {
+            Console.WriteLine(" * Withdraw. *");
+            Console.Write(" * Customer ID: ");
+            string cust = Console.ReadLine();
+            if (int.TryParse(cust, out int custID))
+            {
+                if (db.customers.ContainsKey(custID))
+                {
+                    var findCust = (from customer in db.customers
+                                    where customer.Value.id == custID
+                                    select customer).Single();
+                    var accounts = from account in db.accounts
+                                   where custID == account.Value.customerId
+                                   select account.Value;
+                    Console.Write(" * Accounts: | ");
+                    foreach (var item in accounts)
+                    {
+                        Console.Write(item.accountNumber + " | ");
+                    }
+                    Console.Write("\r\n");
+                    Console.Write(" * Account ID: ");
+                    string acc = Console.ReadLine();
+                    if (int.TryParse(acc, out int accID))
+                    {
+                        if (db.accounts.ContainsKey(accID))
+                        {
+                            var findAcc = (from account in db.accounts
+                                           where account.Value.accountNumber == accID && custID == account.Value.customerId
+                                           select account.Value).Single();
+                            Console.Write(" * Amount: ");
+                            string amount = Console.ReadLine();
+                            if (decimal.TryParse(amount, out decimal currency))
+                            {
+                                findAcc.Withdraw(currency);
+                                findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Withdrawal"));
+
+                            }
+                            else
+                            {
+                                Console.WriteLine(" * Invalid input. * ");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(" * Could not find account. * ");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(" * Invalid input. * ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(" * Could not find that customer. * ");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
+            }
+        }
+
+        private void Transfer()
+        {
+            Console.WriteLine(" * Transfer. *");
+            Console.Write(" * Customer ID: ");
+            string cust = Console.ReadLine();
+            if (int.TryParse(cust, out int custID))
+            {
+                if (db.customers.ContainsKey(custID))
+                {
+                    var findCust = (from customer in db.customers
+                                    where customer.Value.id == custID
+                                    select customer).Single();
+                    var accounts = from account in db.accounts
+                                   where custID == account.Value.customerId
+                                   select account.Value;
+                    Console.Write(" * Accounts: | ");
+                    foreach (var item in accounts)
+                    {
+                        Console.Write(item.accountNumber + " | ");
+                    }
+                    Console.Write("\r\n");
+                    Console.Write(" * From account ID: ");
+                    string fromAcc = Console.ReadLine();
+                    if (int.TryParse(fromAcc, out int fromAccID))
+                    {
+                        if (db.accounts.ContainsKey(fromAccID))
+                        {
+                            var findAcc = (from account in db.accounts
+                                           where account.Value.accountNumber == fromAccID && custID == account.Value.customerId
+                                           select account.Value).Single();
+                            Console.Write(" * To account ID: ");
+                            string toAcc = Console.ReadLine();
+                            if (int.TryParse(toAcc, out int toAccID))
+                            {
+                                if (db.accounts.ContainsKey(toAccID))
+                                {
+                                    var findSecAcc = (from account in db.accounts
+                                                      where account.Value.accountNumber == toAccID
+                                                      select account.Value).Single();
+                                    Console.Write(" * Amount: ");
+                                    string amount = Console.ReadLine();
+                                    if (decimal.TryParse(amount, out decimal currency))
+                                    {
+                                        if (currency < 0)
+                                        {
+                                            Console.WriteLine(" * Cannot transfer negative numbers. * ");
+                                        }
+                                        else
+                                        {
+                                            findAcc.balance -= currency;
+                                            findSecAcc.balance += currency;
+                                            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Transfer"));
+                                            findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findSecAcc.balance, "Transfer"));
+                                            Console.WriteLine();
+                                            Console.WriteLine(" * Successfully transferred " + currency + " from " + findAcc.accountNumber + " to " + findSecAcc.accountNumber + " * ");
+                                            Console.WriteLine();
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(" * Invalid input. * ");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine(" * Could not find that account. * ");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(" * Invalid input. * ");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(" * Could not find that account. * ");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(" * Invalid input. * ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(" * Could not find that customer. * ");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
+            }
+        }
+
+        private void GetAccountImage()
+        {
+            Console.WriteLine(" * Accountimage * ");
+            Console.Write(" * Account ID: ");
+            string acc = Console.ReadLine();
+            if (int.TryParse(acc, out int accID))
+            {
+                if (db.accounts.ContainsKey(accID))
+                {
+                    var findAcc = (from account in db.accounts
+                                   where accID == account.Value.accountNumber
+                                   select account.Value).Single();
+                    Console.WriteLine();
+                    Console.WriteLine(" * Account ID: " + findAcc.accountNumber);
+                    Console.WriteLine(" * Customer ID: " + findAcc.customerId);
+                    Console.WriteLine(" * Balance: " + findAcc.balance);
+                    Console.WriteLine(" * Transactions: ");
+                    Console.WriteLine();
+                    var getTransfers = (from transaction in findAcc.transactions
+                                        select transaction).ToList();
+                    if (getTransfers.Count != 0)
+                    {
+                        foreach (var item in getTransfers)
+                        {
+                            Console.WriteLine(" ** " + item.type + " ** ");
+                            Console.WriteLine(" * Date: " + item.date);
+                            Console.WriteLine(" * Sender: " + item.sender);
+                            Console.WriteLine(" * Reciever: " + item.reciever);
+                            Console.WriteLine(" * Amount: " + item.amount);
+                            Console.WriteLine(" * Current balance: " + item.currentBalance);
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(" ** No recent activity. ** ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(" * Account doesn't exist. *");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine(" * Input invalid. * ");
             }
         }
 
@@ -449,44 +467,21 @@ namespace BankApp
                     var foundCust = (from customer in db.customers
                                     where custID == customer.Value.id
                                     select customer.Value).Single();
-
-                    Console.WriteLine("Customer ID: " + foundCust.id);
-                    Console.WriteLine("Organization number: " + foundCust.organizationNumber);
-                    Console.WriteLine("Name: " + foundCust.organizationName);
-                    Console.WriteLine("Address: " + foundCust.orgAddress);
-
-                    Console.WriteLine();
-                    Console.WriteLine("Accounts: ");
                     var findAccounts = from account in db.accounts
                                        where account.Value.customerId == custID
                                        select account;
-                    foreach (var item in findAccounts)
-                    {
-                        Console.WriteLine(item.Value.accountNumber + ": " + item.Value.balance);
-                    }
+                    PrintCustomerImage(findAccounts, foundCust);
                 }
                 else if(db.accounts.ContainsKey(custID))
                 {
                     var acc = db.accounts[custID];
                     var findAccounts = from account in db.accounts
-                                   where account.Value.customerId == acc.customerId
-                                   select account;
+                                       where account.Value.customerId == acc.customerId
+                                       select account;
                     var foundCust = (from customer in db.customers
                                      where acc.customerId == customer.Value.id
                                      select customer.Value).Single();
-
-                    Console.WriteLine("Customer ID: " + foundCust.id);
-                    Console.WriteLine("Organization number: " + foundCust.organizationNumber);
-                    Console.WriteLine("Name: " + foundCust.organizationName);
-                    Console.WriteLine("Address: " + foundCust.orgAddress);
-
-                    Console.WriteLine();
-                    Console.WriteLine("Accounts: ");
-                    
-                    foreach (var item in findAccounts)
-                    {
-                        Console.WriteLine(item.Value.accountNumber + ": " + item.Value.balance);
-                    }
+                    PrintCustomerImage(findAccounts, foundCust);
                 }
                 else
                 {
@@ -497,6 +492,22 @@ namespace BankApp
             else
             {
                 Console.WriteLine("Could not find the customer you were looking for.");
+            }
+        }
+
+        private static void PrintCustomerImage(IEnumerable<KeyValuePair<int, Account>> findAccounts, Customer foundCust)
+        {
+            Console.WriteLine("Customer ID: " + foundCust.id);
+            Console.WriteLine("Organization number: " + foundCust.organizationNumber);
+            Console.WriteLine("Name: " + foundCust.organizationName);
+            Console.WriteLine("Address: " + foundCust.orgAddress);
+
+            Console.WriteLine();
+            Console.WriteLine("Accounts: ");
+
+            foreach (var item in findAccounts)
+            {
+                Console.WriteLine(item.Value.accountNumber + ": " + item.Value.balance);
             }
         }
 

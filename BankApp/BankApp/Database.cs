@@ -82,8 +82,8 @@ namespace BankApp
 
         public void SaveData()
         {
-
-            using (var writer = new StreamWriter(@"C:\Users\gabbe\source\repos\BankApp\BankApp\BankApp\saved-bankdata.txt"))
+            string date = DateTime.Now.ToString("yyyyMMdd-HHmm") + ".txt";
+            using (var writer = new StreamWriter(date))
             {
                 writer.WriteLine(numberOfCust.ToString());
                 
@@ -149,12 +149,7 @@ namespace BankApp
                 customers.Add(id, new Customer(id, orgNum, orgName, orgAddress, orgCity, orgReg, orgZip, orgCountry, orgPhone));
                 numberOfCust++;
                 Console.WriteLine(" **  Customer " + id.ToString() + " added  ** ");
-                int latestAccount = (from account in accounts
-                                     select account.Value.accountNumber).Max();
-                accounts.Add(latestAccount + 1, new Account(latestAccount + 1, id, 0));
-                numberOfAcc++;
-                Console.WriteLine();
-                Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + id + ". **");
+                CreateAccountForNewCust(id);
             }
             else
             {
@@ -162,6 +157,16 @@ namespace BankApp
                 Console.WriteLine(" * Customer was not created * ");
             }
 
+        }
+
+        private void CreateAccountForNewCust(int id)
+        {
+            int latestAccount = (from account in accounts
+                                 select account.Value.accountNumber).Max();
+            accounts.Add(latestAccount + 1, new Account(latestAccount + 1, id, 0));
+            numberOfAcc++;
+            Console.WriteLine();
+            Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + id + ". **");
         }
 
         public void RemoveCustomer(int id)
