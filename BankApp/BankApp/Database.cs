@@ -92,15 +92,15 @@ namespace BankApp
                 {
                     line = string.Join(";", new string[]
                     {
-                        item.Value.id.ToString(),
-                        item.Value.organizationNumber,
-                        item.Value.organizationName,
-                        item.Value.orgAddress,
-                        item.Value.orgCity,
-                        item.Value.orgRegion,
-                        item.Value.orgZipCode,
-                        item.Value.orgCountry,
-                        item.Value.orgPhoneNumber
+                        item.Value.Id.ToString(),
+                        item.Value.OrganizationNumber,
+                        item.Value.OrganizationName,
+                        item.Value.OrganizationAddress,
+                        item.Value.OrganizationCity,
+                        item.Value.OrganizationRegion,
+                        item.Value.OrganizationZipCode,
+                        item.Value.OrganizationCountry,
+                        item.Value.OrganizationPhoneNumber
                     });
                     writer.WriteLine(line);
                 }
@@ -123,7 +123,7 @@ namespace BankApp
         public void AddCustomer()
         {
             int latestCust = (from customer in customers
-                              select customer.Value.id).Max();
+                              select customer.Value.Id).Max();
             int id = latestCust + 1;
             Console.WriteLine();
             Console.WriteLine("Fields that must be filled are marked with '*'");
@@ -192,7 +192,7 @@ namespace BankApp
             if (int.TryParse(cust, out int custID))
             {
                 var findCust = (from customer in customers
-                               where customer.Value.id == custID
+                               where customer.Value.Id == custID
                                select customer).Count();
                 if(findCust == 1)
                 {

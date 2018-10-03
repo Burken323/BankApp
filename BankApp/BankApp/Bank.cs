@@ -132,17 +132,9 @@ namespace BankApp
                 if (db.customers.ContainsKey(custID))
                 {
                     var findCust = (from customer in db.customers
-                                    where customer.Value.id == custID
+                                    where customer.Value.Id == custID
                                     select customer).Single();
-                    var accounts = from account in db.accounts
-                                   where custID == account.Value.customerId
-                                   select account.Value;
-                    Console.Write(" * Accounts: | ");
-                    foreach (var item in accounts)
-                    {
-                        Console.Write(item.accountNumber + " | ");
-                    }
-                    Console.Write("\r\n");
+                    GetAccountsForCustomer(custID);
                     Console.Write(" * Account ID: ");
                     string acc = Console.ReadLine();
                     if (int.TryParse(acc, out int accID))
@@ -196,17 +188,9 @@ namespace BankApp
                 if (db.customers.ContainsKey(custID))
                 {
                     var findCust = (from customer in db.customers
-                                    where customer.Value.id == custID
+                                    where customer.Value.Id == custID
                                     select customer).Single();
-                    var accounts = from account in db.accounts
-                                   where custID == account.Value.customerId
-                                   select account.Value;
-                    Console.Write(" * Accounts: | ");
-                    foreach (var item in accounts)
-                    {
-                        Console.Write(item.accountNumber + " | ");
-                    }
-                    Console.Write("\r\n");
+                    GetAccountsForCustomer(custID);
                     Console.Write(" * Account ID: ");
                     string acc = Console.ReadLine();
                     if (int.TryParse(acc, out int accID))
@@ -250,6 +234,19 @@ namespace BankApp
             }
         }
 
+        private void GetAccountsForCustomer(int custID)
+        {
+            var accounts = from account in db.accounts
+                           where custID == account.Value.customerId
+                           select account.Value;
+            Console.Write(" * Accounts: | ");
+            foreach (var item in accounts)
+            {
+                Console.Write(item.accountNumber + " | ");
+            }
+            Console.Write("\r\n");
+        }
+
         private void Transfer()
         {
             Console.WriteLine(" * Transfer. *");
@@ -260,7 +257,7 @@ namespace BankApp
                 if (db.customers.ContainsKey(custID))
                 {
                     var findCust = (from customer in db.customers
-                                    where customer.Value.id == custID
+                                    where customer.Value.Id == custID
                                     select customer).Single();
                     var accounts = from account in db.accounts
                                    where custID == account.Value.customerId
@@ -297,15 +294,14 @@ namespace BankApp
                                         {
                                             Console.WriteLine(" * Cannot transfer negative numbers. * ");
                                         }
-                                        else
+                                        else if (findAcc.balance < currency)
                                         {
-                                            findAcc.balance -= currency;
-                                            findSecAcc.balance += currency;
-                                            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Transfer"));
-                                            findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findSecAcc.balance, "Transfer"));
-                                            Console.WriteLine();
-                                            Console.WriteLine(" * Successfully transferred " + currency + " from " + findAcc.accountNumber + " to " + findSecAcc.accountNumber + " * ");
-                                            Console.WriteLine();
+                                            Console.WriteLine(" * Insufficient funds on account: " + findAcc.accountNumber + ". * ");
+                                            Console.WriteLine(" * Current balance: " + findAcc.balance + ". * ");
+                                        }
+                                        else
+                                        { 
+                                            TransferToAcc(findAcc, findSecAcc, currency);
                                         }
 
                                     }
@@ -345,6 +341,19 @@ namespace BankApp
             }
         }
 
+        private static void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
+        {
+            findAcc.balance -= currency;
+            findSecAcc.balance += currency;
+            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, 
+                                        findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findAcc.balance, "Transfer"));
+            findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.accountNumber, 
+                                        findSecAcc.accountNumber, decimal.Add(currency, 0.00M), findSecAcc.balance, "Transfer"));
+            Console.WriteLine();
+            Console.WriteLine(" * Successfully transferred " + currency + " from " + findAcc.accountNumber + " to " + findSecAcc.accountNumber + " * ");
+            Console.WriteLine();
+        }
+
         private void GetAccountImage()
         {
             Console.WriteLine(" * Accountimage * ");
@@ -357,31 +366,7 @@ namespace BankApp
                     var findAcc = (from account in db.accounts
                                    where accID == account.Value.accountNumber
                                    select account.Value).Single();
-                    Console.WriteLine();
-                    Console.WriteLine(" * Account ID: " + findAcc.accountNumber);
-                    Console.WriteLine(" * Customer ID: " + findAcc.customerId);
-                    Console.WriteLine(" * Balance: " + findAcc.balance);
-                    Console.WriteLine(" * Transactions: ");
-                    Console.WriteLine();
-                    var getTransfers = (from transaction in findAcc.transactions
-                                        select transaction).ToList();
-                    if (getTransfers.Count != 0)
-                    {
-                        foreach (var item in getTransfers)
-                        {
-                            Console.WriteLine(" ** " + item.type + " ** ");
-                            Console.WriteLine(" * Date: " + item.date);
-                            Console.WriteLine(" * Sender: " + item.sender);
-                            Console.WriteLine(" * Reciever: " + item.reciever);
-                            Console.WriteLine(" * Amount: " + item.amount);
-                            Console.WriteLine(" * Current balance: " + item.currentBalance);
-                            Console.WriteLine();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine(" ** No recent activity. ** ");
-                    }
+                    PrintAccountAndTransactions(findAcc);
                 }
                 else
                 {
@@ -395,6 +380,35 @@ namespace BankApp
             }
         }
 
+        private static void PrintAccountAndTransactions(Account findAcc)
+        {
+            Console.WriteLine();
+            Console.WriteLine(" * Account ID: " + findAcc.accountNumber);
+            Console.WriteLine(" * Customer ID: " + findAcc.customerId);
+            Console.WriteLine(" * Balance: " + findAcc.balance);
+            Console.WriteLine(" * Transactions: ");
+            Console.WriteLine();
+            var getTransfers = (from transaction in findAcc.transactions
+                                select transaction).ToList();
+            if (getTransfers.Count != 0)
+            {
+                foreach (var item in getTransfers)
+                {
+                    Console.WriteLine(" ** " + item.type + " ** ");
+                    Console.WriteLine(" * Date: " + item.date);
+                    Console.WriteLine(" * Sender: " + item.sender);
+                    Console.WriteLine(" * Reciever: " + item.reciever);
+                    Console.WriteLine(" * Amount: " + item.amount);
+                    Console.WriteLine(" * Current balance: " + item.currentBalance);
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine(" ** No recent activity. ** ");
+            }
+        }
+
         private void RemoveAccFromBank()
         {
             Console.WriteLine(" * Remove account from bank. * ");
@@ -403,7 +417,7 @@ namespace BankApp
             if (int.TryParse(id, out int custID))
             {
                 int findCust = (from customer in db.customers
-                                where customer.Value.id == custID
+                                where customer.Value.Id == custID
                                 select customer).Count();
                 if (findCust == 1)
                 {
@@ -465,7 +479,7 @@ namespace BankApp
                 if (db.customers.ContainsKey(custID))
                 {
                     var foundCust = (from customer in db.customers
-                                    where custID == customer.Value.id
+                                    where custID == customer.Value.Id
                                     select customer.Value).Single();
                     var findAccounts = from account in db.accounts
                                        where account.Value.customerId == custID
@@ -479,7 +493,7 @@ namespace BankApp
                                        where account.Value.customerId == acc.customerId
                                        select account;
                     var foundCust = (from customer in db.customers
-                                     where acc.customerId == customer.Value.id
+                                     where acc.customerId == customer.Value.Id
                                      select customer.Value).Single();
                     PrintCustomerImage(findAccounts, foundCust);
                 }
@@ -497,10 +511,10 @@ namespace BankApp
 
         private static void PrintCustomerImage(IEnumerable<KeyValuePair<int, Account>> findAccounts, Customer foundCust)
         {
-            Console.WriteLine("Customer ID: " + foundCust.id);
-            Console.WriteLine("Organization number: " + foundCust.organizationNumber);
-            Console.WriteLine("Name: " + foundCust.organizationName);
-            Console.WriteLine("Address: " + foundCust.orgAddress);
+            Console.WriteLine("Customer ID: " + foundCust.Id);
+            Console.WriteLine("Organization number: " + foundCust.OrganizationNumber);
+            Console.WriteLine("Name: " + foundCust.OrganizationName);
+            Console.WriteLine("Address: " + foundCust.OrganizationAddress);
 
             Console.WriteLine();
             Console.WriteLine("Accounts: ");
@@ -528,14 +542,14 @@ namespace BankApp
             Console.Write(" * Name or zipcode: ");
             string cust = Console.ReadLine();
             var findCust = from customer in db.customers
-                           where customer.Value.organizationName.Contains(cust) || customer.Value.orgZipCode == cust
+                           where customer.Value.OrganizationName.Contains(cust) || customer.Value.OrganizationZipCode == cust
                            select customer;
             if (!(findCust.Count() < 1))
             {
                 Console.WriteLine();
                 foreach (var item in findCust)
                 {
-                    Console.Write(item.Value.id + " | " + item.Value.organizationName + "\r\n");
+                    Console.Write(item.Value.Id + " | " + item.Value.OrganizationName + "\r\n");
                 }
             }
             else

@@ -8,15 +8,15 @@ namespace BankApp
 {
     class Customer
     {
-        public int id { get; set; }
-        public string organizationNumber { get; set; }
-        public string organizationName { get; set; }
-        public string orgAddress { get; set; }
-        public string orgCity { get; set; }
-        public string orgRegion { get; set; }
-        public string orgZipCode { get; set; }
-        public string orgCountry { get; set; }
-        public string orgPhoneNumber { get; set; }
+        public int Id { get; set; }
+        public string OrganizationNumber { get; set; }
+        public string OrganizationName { get; set; }
+        public string OrganizationAddress { get; set; }
+        public string OrganizationCity { get; set; }
+        public string OrganizationRegion { get; set; }
+        public string OrganizationZipCode { get; set; }
+        public string OrganizationCountry { get; set; }
+        public string OrganizationPhoneNumber { get; set; }
         
 
         public Customer()
@@ -24,17 +24,18 @@ namespace BankApp
 
         }
         
-        public Customer( int idNum, string orgNumber, string orgName, string address, string city, string region, string zipcode, string country, string phoneNum)
+        public Customer( int id, string orgNumber, string orgName, string orgAddress, string orgCity, string orgRegion, 
+                            string orgZipcode, string orgCountry, string orgPhoneNum)
         {
-            id = idNum;
-            organizationNumber = orgNumber;
-            organizationName = orgName;
-            orgAddress = address;
-            orgCity = city;
-            orgRegion = region;
-            orgZipCode = zipcode;
-            orgCountry = country;
-            orgPhoneNumber = phoneNum;
+            Id = id;
+            OrganizationNumber = orgNumber;
+            OrganizationName = orgName;
+            OrganizationAddress = orgAddress;
+            OrganizationCity = orgCity;
+            OrganizationRegion = orgRegion;
+            OrganizationZipCode = orgZipcode;
+            OrganizationCountry = orgCountry;
+            OrganizationPhoneNumber = orgPhoneNum;
 
         }
 
