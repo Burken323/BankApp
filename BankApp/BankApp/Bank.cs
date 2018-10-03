@@ -239,12 +239,14 @@ namespace BankApp
             var accounts = from account in db.accounts
                            where custID == account.Value.customerId
                            select account.Value;
+            Console.WriteLine();
             Console.Write(" * Accounts: | ");
             foreach (var item in accounts)
             {
                 Console.Write(item.accountNumber + " | ");
             }
-            Console.Write("\r\n");
+            Console.Write("* \r\n");
+            Console.WriteLine();
         }
 
         private void Transfer()
@@ -259,15 +261,7 @@ namespace BankApp
                     var findCust = (from customer in db.customers
                                     where customer.Value.Id == custID
                                     select customer).Single();
-                    var accounts = from account in db.accounts
-                                   where custID == account.Value.customerId
-                                   select account.Value;
-                    Console.Write(" * Accounts: | ");
-                    foreach (var item in accounts)
-                    {
-                        Console.Write(item.accountNumber + " | ");
-                    }
-                    Console.Write("\r\n");
+                    GetAccountsForCustomer(custID);
                     Console.Write(" * From account ID: ");
                     string fromAcc = Console.ReadLine();
                     if (int.TryParse(fromAcc, out int fromAccID))
