@@ -11,6 +11,7 @@ namespace BankApp
         public int AccountNumber { get; set; }
         public int CustomerId { get; set; }
         public decimal Balance { get; set; }
+        public decimal YearInterest { get; set; }
         public decimal Interest { get; set; }
         public decimal DebtInterest { get; set; }
         public int Credit { get; set; }
@@ -21,7 +22,8 @@ namespace BankApp
             AccountNumber = accNum;
             CustomerId = custId;
             Balance = bal;
-            Interest = 0.05M;
+            YearInterest = 0.25M;
+            Interest = 0.25M / 365;
             Credit = 10000;
             DebtInterest = 0;
             transactions = new List<Transaction>();
@@ -38,28 +40,43 @@ namespace BankApp
                 Console.WriteLine(" * Credit set to: " + Credit + ". * ");
             }
         }
-
         public void SetDebtInterest()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(" * Current debtinterest for the day on this account is: " + DebtInterest + ". * ");
+            Console.Write(" * Set debtinterest for the day to: ");
+            string newDebtInterest = Console.ReadLine();
+            if (decimal.TryParse(newDebtInterest, out decimal debtInterest))
+            {
+                if (debtInterest < Interest)
+                {
+                    DebtInterest = (debtInterest/100)/365;
+                    Console.WriteLine(" * Debtinterest set to: " + debtInterest + ". * ");
+                }
+                else
+                {
+                    Console.WriteLine(" * Debtinterest must be smaller than the interest for the account. * ");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
+            }
         }
 
         public void SetInterest()
         {
-            Console.WriteLine(" * Current interest for this account is: " + Interest + ". * ");
-            Console.Write(" * Set interest to: ");
+            Console.WriteLine(" * Current interest for the day on this account is: " + Interest + ". * ");
+            Console.Write(" * Set year interest to: ");
             string newInterest = Console.ReadLine();
-            if(decimal.TryParse(newInterest, out decimal interest))
+            if (decimal.TryParse(newInterest, out decimal interest))
             {
-                if (Balance < 0)
-                {
-                    DebtInterest = -Balance * 0.01M;
-                }
-                else
-                {
-                    Interest = interest;
-                    Console.WriteLine(" * Interest set to: " + Interest + ". * ");
-                }
+                YearInterest = interest/100;
+                Interest = YearInterest / 365;
+                Console.WriteLine(" * Year interest set to: " + interest + "%. * ");
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
             }
         }
 
@@ -72,18 +89,18 @@ namespace BankApp
             else
             {
                 Balance += decimal.Add(currency, 0.00M);
+                if (Balance > 0)
+                {
+                    DebtInterest = 0;
+                    Interest = 0.25M / 365;
+                }
                 Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
             }
         }
 
         public bool Withdraw(decimal currency)
         {
-            if(Balance < 0)
-            {
-                Console.WriteLine(" * You cannot withdraw anymore from this account right now. * ");
-                return false;
-            }
-            else if (currency < 0)
+            if (currency < 0)
             {
                 Console.WriteLine(" ** Cannot withdraw a negative value. ** ");
                 return false;
@@ -94,10 +111,27 @@ namespace BankApp
                 Console.WriteLine(" ** Current balance: " + Balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
                 return false;
             }
+            
             else
             {
                 Balance -= decimal.Add(currency, 0.00M);
-                Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
+                if(Balance < 0)
+                {
+                    DebtInterest = 0.05M / 365;
+                    if(Interest - DebtInterest > 0)
+                    {
+                        Interest = Interest - DebtInterest;
+                        Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
+                    }
+                    else
+                    {
+                        Console.WriteLine(" ** ERROR! DebtInterest cannot be greater than the interest. ** ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
+                }
                 return true;
             }
         }

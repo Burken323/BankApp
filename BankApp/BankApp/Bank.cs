@@ -9,12 +9,10 @@ namespace BankApp
     class Bank
     {
         public Database DataBase;
-        public DateTime StartUp;
 
         public Bank()
         {
             DataBase = new Database();
-            StartUp = DateTime.Now;
         }
 
         public void BankOpen()
@@ -98,7 +96,34 @@ namespace BankApp
                         //Set credit for the account.
                         SetCreditForAccount();
                     }
+                    if (userInput.Equals("14"))
+                    {
+                        //Set the debtinterest for the account.
+                        SetDebtInterestForAccount();
+                    }
                 }
+            }
+        }
+
+        private void SetDebtInterestForAccount()
+        {
+            Console.WriteLine(" * Debtinterest. * ");
+            Console.Write(" * Account ID: ");
+            string acc = Console.ReadLine();
+            if (int.TryParse(acc, out int accID))
+            {
+                if (DataBase.accounts.ContainsKey(accID))
+                {
+                    DataBase.accounts[accID].SetDebtInterest();
+                }
+                else
+                {
+                    Console.WriteLine(" * Could not find that account. * ");
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
             }
         }
 
@@ -130,10 +155,24 @@ namespace BankApp
                              select account.Value;
             foreach (var item in getAccounts)
             {
-                item.Balance += item.Balance * item.Interest;
-                item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
-                                                            item.AccountNumber, decimal.Add((item.Balance * item.Interest), 0.00M), 
-                                                                item.Balance, "Interest"));
+                decimal balance = 0;
+                
+                if(item.Balance < 0)
+                {
+                    balance = -item.Balance;
+                    item.Balance -= balance * item.Interest;
+                    item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
+                                                                item.AccountNumber, -balance * item.Interest,
+                                                                    item.Balance, "Interest"));
+                }
+                else
+                {
+                    balance = item.Balance;
+                    item.Balance += balance * item.Interest;
+                    item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
+                                                                item.AccountNumber, balance * item.Interest,
+                                                                    item.Balance, "Interest"));
+                }
             }
             Console.WriteLine(" * Interest added to all accounts. * ");
             Console.WriteLine();
@@ -195,7 +234,8 @@ namespace BankApp
             Console.WriteLine("   |[10] Show accountimage.                   |   ");
             Console.WriteLine("   |[11] Change interest.                     |   ");
             Console.WriteLine("   |[12] Calculate interest.                  |   ");
-            Console.WriteLine("   |[13] Credit and debtinterest.             |   ");
+            Console.WriteLine("   |[13] Credit.                              |   ");
+            Console.WriteLine("   |[14] Debtinterest.                        |   ");
             Console.WriteLine("   |__________________________________________|   ");
             Console.WriteLine(" *************************************************");
         }
@@ -364,23 +404,15 @@ namespace BankApp
                                     string amount = Console.ReadLine();
                                     if (decimal.TryParse(amount, out decimal currency))
                                     {
-                                        if (findAcc.Balance < 0)
-                                        {
-                                            Console.WriteLine(" * You cannot withdraw anymore from this account right now. * ");
-                                        }
-                                        else if (currency < 0)
+                                        if (currency < 0)
                                         {
                                             Console.WriteLine(" * Cannot transfer negative numbers. * ");
                                         }
                                         else if ((findAcc.Balance - currency) < (-findAcc.Credit))
                                         {
                                             Console.WriteLine(" ** Insufficient credits on account. ** ");
-                                            Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " + decimal.Add(currency, 0.00M) + " ** ");
-                                        }
-                                        else if (findAcc.Balance < currency)
-                                        {
-                                            Console.WriteLine(" * Insufficient funds on account: " + findAcc.AccountNumber + ". * ");
-                                            Console.WriteLine(" * Current balance: " + findAcc.Balance + ". * ");
+                                            Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " + 
+                                                                    decimal.Add(currency, 0.00M) + " ** ");
                                         }
                                         else
                                         { 
@@ -426,8 +458,27 @@ namespace BankApp
 
         private static void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
         {
+
             findAcc.Balance -= currency;
             findSecAcc.Balance += currency;
+            if(findAcc.Balance < 0)
+            {
+                findAcc.DebtInterest = 0.05M / 365;
+                if (findAcc.Interest - findAcc.DebtInterest > 0)
+                {
+                    findAcc.Interest = findAcc.Interest - findAcc.DebtInterest;
+                    Console.WriteLine(" * Current balance in account: " + findAcc.AccountNumber + ", has changed to: " + findAcc.Balance);
+                }
+                else
+                {
+                    Console.WriteLine(" ** ERROR! DebtInterest cannot be greater than the interest. ** ");
+                }
+            }
+            if(findSecAcc.Balance > 0)
+            {
+                findSecAcc.DebtInterest = 0;
+                findSecAcc.Interest = 0.25M / 365;
+            }
             findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
                                         findSecAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Transfer"));
             findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
