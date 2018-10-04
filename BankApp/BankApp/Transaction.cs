@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApp
 {
-    class Transaction
+    public class Transaction
     {
         public string Date { get; set; }
         public int Sender { get; set; }

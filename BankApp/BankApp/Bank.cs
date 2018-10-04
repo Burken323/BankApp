@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApp
 {
-    class Bank
+    public class Bank
     {
         public Database DataBase;
 
@@ -404,20 +404,7 @@ namespace BankApp
                                     string amount = Console.ReadLine();
                                     if (decimal.TryParse(amount, out decimal currency))
                                     {
-                                        if (currency < 0)
-                                        {
-                                            Console.WriteLine(" * Cannot transfer negative numbers. * ");
-                                        }
-                                        else if ((findAcc.Balance - currency) < (-findAcc.Credit))
-                                        {
-                                            Console.WriteLine(" ** Insufficient credits on account. ** ");
-                                            Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " + 
-                                                                    decimal.Add(currency, 0.00M) + " ** ");
-                                        }
-                                        else
-                                        { 
-                                            TransferToAcc(findAcc, findSecAcc, currency);
-                                        }
+                                        CheckCreditForTransfer(findAcc, findSecAcc, currency);
 
                                     }
                                     else
@@ -456,7 +443,25 @@ namespace BankApp
             }
         }
 
-        private static void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
+        public void CheckCreditForTransfer(Account findAcc, Account findSecAcc, decimal currency)
+        {
+            if (currency < 0)
+            {
+                Console.WriteLine(" * Cannot transfer negative numbers. * ");
+            }
+            else if ((findAcc.Balance - currency) < (-findAcc.Credit))
+            {
+                Console.WriteLine(" ** Insufficient credits on account. ** ");
+                Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " +
+                                        decimal.Add(currency, 0.00M) + " ** ");
+            }
+            else
+            {
+                TransferToAcc(findAcc, findSecAcc, currency);
+            }
+        }
+
+        private void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
         {
 
             findAcc.Balance -= currency;

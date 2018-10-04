@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankApp
 {
-    class Database
+    public class Database
     {
         public int CustomerCount { get; set; }
         public int AccountCount { get; set; }
