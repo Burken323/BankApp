@@ -66,6 +66,7 @@ namespace BankApp
         public void SetInterest()
         {
             Console.WriteLine(" * Current interest for the day on this account is: " + Interest + ". * ");
+            Console.WriteLine(" * Current interest for the year on this account is: " + YearInterest + ". * ");
             Console.Write(" * Set year interest to: ");
             string newInterest = Console.ReadLine();
             if (decimal.TryParse(newInterest, out decimal interest))
