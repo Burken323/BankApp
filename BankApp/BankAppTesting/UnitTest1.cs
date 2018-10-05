@@ -23,7 +23,9 @@ namespace BankAppTesting
             decimal testAmountTwo = 101.00M;
             bank.CheckCreditForTransfer(accountOne, accountTwo, testAmountTwo);
 
+            //Withdraw test:
             Assert.AreEqual(false, test);
+            //Transfer test:
             Assert.AreEqual(result == 100.00M, accountOne.Balance == result);
         }
         [TestMethod]
@@ -36,7 +38,9 @@ namespace BankAppTesting
             decimal expected = 100.00M;
             accountOne.Deposit(testAmountTwo);
 
+            //Withdraw test:
             Assert.AreEqual(false, test);
+            //Deposit test:
             Assert.AreEqual(expected, accountOne.Balance);
         }
         [TestMethod]
@@ -53,7 +57,9 @@ namespace BankAppTesting
             bank.CheckCreditForTransfer(accountTwo, accountOne, testAmountTwo);
             bool resultTwo = accountTwo.DebtInterest != 0;
 
+            //Withdraw with credit and debtinterest test:
             Assert.AreEqual(true, result);
+            //Transfer with credit and debtinterest test:
             Assert.AreEqual(true, accountTwo.DebtInterest != 0 && accountTwo.Balance < 0);
         }
     }

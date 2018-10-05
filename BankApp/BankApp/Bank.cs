@@ -505,7 +505,7 @@ namespace BankApp
                     var findAcc = (from account in DataBase.accounts
                                    where accID == account.Value.AccountNumber
                                    select account.Value).Single();
-                    PrintAccountAndTransactions(findAcc);
+                    FindTransactions(findAcc);
                 }
                 else
                 {
@@ -519,7 +519,7 @@ namespace BankApp
             }
         }
 
-        private static void PrintAccountAndTransactions(Account findAcc)
+        private static void FindTransactions(Account findAcc)
         {
             Console.WriteLine();
             Console.WriteLine(" * Account ID: " + findAcc.AccountNumber);
