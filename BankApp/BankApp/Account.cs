@@ -47,7 +47,7 @@ namespace BankApp
             string newDebtInterest = Console.ReadLine();
             if (decimal.TryParse(newDebtInterest, out decimal debtInterest))
             {
-                if (debtInterest < Interest)
+                if ((debtInterest / 100) < YearInterest)
                 {
                     DebtInterest = (debtInterest/100)/365;
                     Console.WriteLine(" * Debtinterest set to: " + debtInterest + ". * ");

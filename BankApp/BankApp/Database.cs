@@ -186,7 +186,6 @@ namespace BankApp
                 Console.WriteLine(" ** Error! Missing input.. ** ");
                 Console.WriteLine(" * Customer was not created * ");
             }
-
         }
 
         private void CreateAccountForNewCust(int id)
@@ -197,6 +196,21 @@ namespace BankApp
             AccountCount++;
             Console.WriteLine();
             Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + id + ". **");
+        }
+
+        public void RemoveCustFromBank()
+        {
+            Console.WriteLine(" * Remove customer from bank. *");
+            Console.Write(" * Customerid: ");
+            string id = Console.ReadLine();
+            if (int.TryParse(id, out int custId))
+            {
+                RemoveCustomer(custId);
+            }
+            else
+            {
+                Console.WriteLine(" * Customer not found. * ");
+            }
         }
 
         public void RemoveCustomer(int id)
@@ -250,6 +264,39 @@ namespace BankApp
             }
         }
 
+        public void RemoveAccFromBank()
+        {
+            Console.WriteLine(" * Remove account from bank. * ");
+            Console.Write(" * Customer ID: ");
+            string id = Console.ReadLine();
+            if (int.TryParse(id, out int custID))
+            {
+                int findCust = (from customer in customers
+                                where customer.Value.Id == custID
+                                select customer).Count();
+                if (findCust == 1)
+                {
+                    Console.Write(" * Account ID: ");
+                    string acc = Console.ReadLine();
+                    if (int.TryParse(acc, out int accID))
+                    {
+                        var selAccount = (from account in accounts
+                                          where account.Value.AccountNumber == accID
+                                          select account).Single();
+                        RemoveAccount(selAccount.Value.AccountNumber);
+                    }
+                    else
+                    {
+                        Console.WriteLine(" * Account not found. * ");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(" * Customer not found. * ");
+            }
+        }
+
         public void RemoveAccount(int id)
         {
             var keys = accounts.Keys;
@@ -264,6 +311,162 @@ namespace BankApp
             else
             {
                 Console.WriteLine("Account still contains currency.");
+            }
+        }
+
+        public void ShowCustomerImage()
+        {
+            Console.WriteLine(" * Show customerimage. * ");
+            Console.Write(" * Customer ID or account ID: ");
+            string custOrAcc = Console.ReadLine();
+            Console.WriteLine();
+            if (int.TryParse(custOrAcc, out int custOrAccID))
+            {
+                if (customers.ContainsKey(custOrAccID))
+                {
+                    var foundCust = (from customer in customers
+                                     where custOrAccID == customer.Value.Id
+                                     select customer.Value).Single();
+                    var findAccounts = from account in accounts
+                                       where account.Value.CustomerId == custOrAccID
+                                       select account;
+                    PrintCustomerImage(findAccounts, foundCust);
+                }
+                else if (accounts.ContainsKey(custOrAccID))
+                {
+                    var acc = accounts[custOrAccID];
+                    var findAccounts = from account in accounts
+                                       where account.Value.CustomerId == acc.CustomerId
+                                       select account;
+                    var foundCust = (from customer in customers
+                                     where acc.CustomerId == customer.Value.Id
+                                     select customer.Value).Single();
+                    PrintCustomerImage(findAccounts, foundCust);
+                }
+                else
+                {
+                    Console.WriteLine(" * Could not find customer. * ");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Could not find the customer you were looking for.");
+            }
+        }
+
+        private void PrintCustomerImage(IEnumerable<KeyValuePair<int, Account>> findAccounts, Customer foundCust)
+        {
+            Console.WriteLine("Customer ID: " + foundCust.Id);
+            Console.WriteLine("Organization number: " + foundCust.OrganizationNumber);
+            Console.WriteLine("Name: " + foundCust.OrganizationName);
+            Console.WriteLine("Address: " + foundCust.OrganizationAddress);
+
+            Console.WriteLine();
+            Console.WriteLine("Accounts: ");
+
+            decimal totalBalance = 0;
+            foreach (var item in findAccounts)
+            {
+                Console.WriteLine(item.Value.AccountNumber + ": " + item.Value.Balance);
+                totalBalance += item.Value.Balance;
+            }
+            Console.WriteLine("Total balance on all accounts: " + totalBalance + ".");
+            Console.WriteLine();
+        }
+
+        public void SearchCustomer()
+        {
+            Console.WriteLine(" * Search customer. *");
+            Console.Write(" * Name or zipcode: ");
+            string cust = Console.ReadLine();
+            var findCust = from customer in customers
+                           where (customer.Value.OrganizationName.Contains(cust) ||
+                                    customer.Value.OrganizationCity.Contains(cust)) && !String.IsNullOrWhiteSpace(cust)
+                           select customer;
+            if (!(findCust.Count() < 1))
+            {
+                Console.WriteLine();
+                foreach (var item in findCust)
+                {
+                    Console.Write(item.Value.Id + " | " + item.Value.OrganizationName + "\r\n");
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine(" * Could not find any customers. * ");
+            }
+        }
+
+        public void GetAccountImage()
+        {
+            Console.WriteLine(" * Accountimage * ");
+            Console.Write(" * Account ID: ");
+            string acc = Console.ReadLine();
+            if (int.TryParse(acc, out int accID))
+            {
+                if (accounts.ContainsKey(accID))
+                {
+                    var findAcc = (from account in accounts
+                                   where accID == account.Value.AccountNumber
+                                   select account.Value).Single();
+                    FindTransactions(findAcc);
+                }
+                else
+                {
+                    Console.WriteLine(" * Account doesn't exist. *");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine(" * Input invalid. * ");
+            }
+        }
+
+        private void FindTransactions(Account findAcc)
+        {
+            Console.WriteLine();
+            Console.WriteLine(" * Account ID: " + findAcc.AccountNumber);
+            Console.WriteLine(" * Customer ID: " + findAcc.CustomerId);
+            Console.WriteLine(" * Balance: " + findAcc.Balance);
+            Console.WriteLine(" * Transactions: ");
+            Console.WriteLine();
+            var getTransfers = (from transaction in findAcc.transactions
+                                select transaction).ToList();
+            if (getTransfers.Count != 0)
+            {
+                foreach (var item in getTransfers)
+                {
+                    CheckAndPrintTypeOfTransaction(item);
+                }
+            }
+            else
+            {
+                Console.WriteLine(" ** No recent activity. ** ");
+            }
+        }
+
+        private void CheckAndPrintTypeOfTransaction(Transaction item)
+        {
+            if (item.Sender == item.Reciever)
+            {
+                Console.WriteLine(" ** " + item.Type + " ** ");
+                Console.WriteLine(" * Date: " + item.Date);
+                Console.WriteLine(" * Amount: " + item.Amount);
+                Console.WriteLine(" * Current balance: " + item.CurrentBalance);
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine(" ** " + item.Type + " ** ");
+                Console.WriteLine(" * Date: " + item.Date);
+                Console.WriteLine(" * Sender: " + item.Sender);
+                Console.WriteLine(" * Reciever: " + item.Reciever);
+                Console.WriteLine(" * Amount: " + item.Amount);
+                Console.WriteLine(" * Current balance: " + item.CurrentBalance);
+                Console.WriteLine();
             }
         }
     }
