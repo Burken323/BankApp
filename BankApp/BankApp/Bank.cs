@@ -324,7 +324,7 @@ namespace BankApp
             }
         }
 
-        private void CheckCreditForTransfer(Account findAcc, Account findSecAcc, decimal currency)
+        public void CheckCreditForTransfer(Account findAcc, Account findSecAcc, decimal currency)
         {
             if (currency < 0)
             {
@@ -377,7 +377,7 @@ namespace BankApp
         public void SaveAndExit()
         {
             Console.WriteLine("  ** Saving data to file.. **  ");
-            DataBase.SaveData();
+            DataBase.SaveDataBase();
 
             Console.WriteLine("  ** Exiting program. **  ");
             //Save data into different file and exit.

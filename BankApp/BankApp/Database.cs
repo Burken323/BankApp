@@ -21,132 +21,18 @@ namespace BankApp
             accounts = new Dictionary<int, Account>();
         }
 
-        public void GetData()
+        public void GetDataBase()
         {
-            using (var data = new StreamReader("bankdata.txt"))
-            {
-                string[] line = data.ReadLine().Split(';');
-                
-                if(int.TryParse(line[0], out int numOfCust))
-                {
-                    CustomerCount = numOfCust;
-                    line = GetCustomers(data, line, numOfCust);
-                }
-                else
-                {
-                    Console.WriteLine("Error...");
-                }
-
-                line = data.ReadLine().Split(';');
-
-                if (int.TryParse(line[0], out int numOfAcc))
-                {
-                    AccountCount = numOfAcc;
-                    line = GetAccounts(data, line, numOfAcc);
-                }
-                else
-                {
-                    Console.WriteLine("Error...");
-                }
-            }
+            FileManager fileManager = new FileManager(customers, accounts, CustomerCount, AccountCount);
+            fileManager.GetData();
+            CustomerCount = fileManager.Customers;
+            AccountCount = fileManager.Accounts;
         }
 
-        private string[] GetCustomers(StreamReader data, string[] line, int numOfCust)
+        public void SaveDataBase()
         {
-            for (int c = 0; c < numOfCust; c++)
-            {
-                line = data.ReadLine().Split(';');
-                int tempId = int.Parse(line[0]);
-                Customer cust = new Customer(tempId, line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8]);
-                customers.Add(tempId, cust);
-            }
-            return line;
-        }
-
-        private string[] GetAccounts(StreamReader data, string[] line, int numOfAcc)
-        {
-            for (int c = 0; c < numOfAcc; c++)
-            {
-                line = data.ReadLine().Split(';');
-                int tempId = int.Parse(line[0]);
-                Account acc = new Account(tempId, int.Parse(line[1]), decimal.Parse(line[2], CultureInfo.InvariantCulture));
-                accounts.Add(tempId, acc);
-            }
-            return line;
-        }
-
-        public void SaveData()
-        {
-            string date = DateTime.Now.ToString("yyyyMMdd-HHmm") + ".txt";
-            using (var writer = new StreamWriter(date))
-            {
-                writer.WriteLine(CustomerCount.ToString());
-                
-                string line = "";
-                foreach (var item in customers)
-                {
-                    line = string.Join(";", new string[]
-                    {
-                        item.Value.Id.ToString(),
-                        item.Value.OrganizationNumber,
-                        item.Value.OrganizationName,
-                        item.Value.OrganizationAddress,
-                        item.Value.OrganizationCity,
-                        item.Value.OrganizationRegion,
-                        item.Value.OrganizationZipCode,
-                        item.Value.OrganizationCountry,
-                        item.Value.OrganizationPhoneNumber
-                    });
-                    writer.WriteLine(line);
-                }
-
-                writer.WriteLine(AccountCount.ToString());
-                foreach (var item in accounts)
-                {
-                    line = string.Join(";", new string[]
-                    {
-                        item.Value.AccountNumber.ToString(),
-                        item.Value.CustomerId.ToString(),
-                        item.Value.Balance.ToString()
-                    });
-                    writer.WriteLine(line);
-                }
-            }
-            SaveTransactions();
-        }
-
-        private void SaveTransactions()
-        {
-            string fileName = "Transactions-" + DateTime.Now.ToString("yyyyMMdd-HHmm") + ".txt";
-            using(var writer = new StreamWriter(fileName))
-            {
-                var transactionCount = (from account in accounts
-                                       where account.Value.transactions.Count > 0
-                                       select account.Value.transactions.Count).Sum();
-                writer.WriteLine(transactionCount.ToString());
-
-                var accountWithHistory = from account in accounts
-                                         where account.Value.transactions.Count > 0
-                                         select account.Value.transactions;
-                string line = "";
-
-                foreach (var item in accountWithHistory)
-                {
-                    for (int i = 0; i < item.Count; i++)
-                    {
-                        line = String.Join(";", new string[]
-                        {
-                            item[i].Date,
-                            item[i].Sender.ToString(),
-                            item[i].Reciever.ToString(),
-                            item[i].Amount.ToString(),
-                            item[i].CurrentBalance.ToString(),
-                            item[i].Type
-                        });
-                        writer.WriteLine(line);
-                    }
-                }
-            }
+            FileManager fileManager = new FileManager(customers, accounts, CustomerCount, AccountCount);
+            fileManager.SaveData();
         }
 
         public void AddCustomer()
@@ -225,6 +111,13 @@ namespace BankApp
                 {
                     customers.Remove(id);
                     CustomerCount--;
+                    var getAccounts = (from account in accounts
+                                       where account.Value.CustomerId == id
+                                       select account.Value).ToList();
+                    foreach (var item in getAccounts)
+                    {
+                        accounts.Remove(item.AccountNumber);
+                    }
                     Console.WriteLine();
                     Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
                 }

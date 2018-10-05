@@ -25,7 +25,7 @@ namespace BankApp
             Console.WriteLine(" ************************************************* ");
             Console.WriteLine("                                             ");
             Console.WriteLine(" ** Getting customer data...         ** ");
-            DataBase.GetData();
+            DataBase.GetDataBase();
             Console.WriteLine(" ** We currently have: " + DataBase.CustomerCount + " customers. **");
             Console.WriteLine(" ** We currently have: " + DataBase.AccountCount + " accounts. **");
             var totalBalance = (from account in DataBase.accounts.Values
