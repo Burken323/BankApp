@@ -42,7 +42,7 @@ namespace BankApp
         }
         public void SetDebtInterest()
         {
-            Console.WriteLine(" * Current debtinterest for the day on this account is: " + DebtInterest + ". * ");
+            Console.WriteLine(" * Current debtinterest for the day on this account is: " + decimal.Round(DebtInterest, 4) + ". * ");
             Console.Write(" * Set debtinterest for the day to: ");
             string newDebtInterest = Console.ReadLine();
             if (decimal.TryParse(newDebtInterest, out decimal debtInterest))
@@ -65,7 +65,7 @@ namespace BankApp
 
         public void SetInterest()
         {
-            Console.WriteLine(" * Current interest for the day on this account is: " + Interest + ". * ");
+            Console.WriteLine(" * Current interest for the day on this account is: " + decimal.Round(Interest, 4) + ". * ");
             Console.WriteLine(" * Current interest for the year on this account is: " + YearInterest + ". * ");
             Console.Write(" * Set year interest to: ");
             string newInterest = Console.ReadLine();

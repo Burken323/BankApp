@@ -147,7 +147,7 @@ namespace BankApp
                             string amount = Console.ReadLine();
                             if (decimal.TryParse(amount, out decimal currency))
                             {
-                                findAcc.Deposit(decimal.Round(currency, 4));
+                                findAcc.Deposit(currency);
                                 findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
                                                             findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Deposit"));
                             }
@@ -203,7 +203,7 @@ namespace BankApp
                             string amount = Console.ReadLine();
                             if (decimal.TryParse(amount, out decimal currency))
                             {
-                                if (findAcc.Withdraw(decimal.Round(currency, 4)))
+                                if (findAcc.Withdraw(currency))
                                 {
                                     findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
                                                                 findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Withdrawal"));
@@ -285,7 +285,7 @@ namespace BankApp
                                     string amount = Console.ReadLine();
                                     if (decimal.TryParse(amount, out decimal currency))
                                     {
-                                        CheckCreditForTransfer(findAcc, findSecAcc, decimal.Round(currency, 4));
+                                        CheckCreditForTransfer(findAcc, findSecAcc, currency);
 
                                     }
                                     else
