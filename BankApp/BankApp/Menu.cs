@@ -48,8 +48,8 @@ namespace BankApp
             Console.WriteLine("   |[10] Show accountimage.                   |   ");
             Console.WriteLine("   |[11] Change interest.                     |   ");
             Console.WriteLine("   |[12] Calculate interest.                  |   ");
-            Console.WriteLine("   |[13] Credit.                              |   ");
-            Console.WriteLine("   |[14] Debtinterest.                        |   ");
+            Console.WriteLine("   |[13] Change credit.                       |   ");
+            Console.WriteLine("   |[14] Change debtinterest.                 |   ");
             Console.WriteLine("   |__________________________________________|   ");
             Console.WriteLine(" *************************************************");
         }

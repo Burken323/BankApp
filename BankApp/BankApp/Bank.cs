@@ -71,6 +71,7 @@ namespace BankApp
 
         public void CalculateAndAddInterestToAccounts()
         {
+            //TODO: Need to double check that the interest and debtinterest is working as intended...
             var getAccounts = from account in DataBase.accounts
                              select account.Value;
             foreach (var item in getAccounts)
