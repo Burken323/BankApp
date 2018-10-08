@@ -62,7 +62,7 @@ namespace BankApp
 
                 if (userInput.Equals("0"))
                 {
-                    //Save the data and exit the application. Bank / DB
+                    //Save the data and exit the application. Bank / DB / FM
                     SaveAndExit();
                 }
                 if (userInput.Equals("1"))

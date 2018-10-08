@@ -28,7 +28,6 @@ namespace BankApp
             using (var data = new StreamReader("bankdata.txt"))
             {
                 string[] line = data.ReadLine().Split(';');
-
                 if (int.TryParse(line[0], out int numOfCust))
                 {
                     Customers = numOfCust;
@@ -38,9 +37,7 @@ namespace BankApp
                 {
                     Console.WriteLine("Error...");
                 }
-
                 line = data.ReadLine().Split(';');
-
                 if (int.TryParse(line[0], out int numOfAcc))
                 {
                     Accounts = numOfAcc;
@@ -83,7 +80,6 @@ namespace BankApp
             using (var writer = new StreamWriter(date))
             {
                 writer.WriteLine(Customers.ToString());
-
                 string line = "";
                 foreach (var item in CustomersFromFile)
                 {
@@ -101,7 +97,6 @@ namespace BankApp
                     });
                     writer.WriteLine(line);
                 }
-
                 writer.WriteLine(Accounts.ToString());
                 foreach (var item in AccountsFromFile)
                 {
@@ -131,7 +126,6 @@ namespace BankApp
                                          where account.Value.transactions.Count > 0
                                          select account.Value.transactions;
                 string line = "";
-
                 foreach (var item in accountWithHistory)
                 {
                     for (int i = 0; i < item.Count; i++)

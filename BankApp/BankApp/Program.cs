@@ -10,7 +10,6 @@ namespace BankApp
     {
         static void Main(string[] args)
         {
-            //Skapa samt starta bankappen.
             Bank bank = new Bank();
             bank.BankOpen();
         }

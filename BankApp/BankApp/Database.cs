@@ -208,7 +208,6 @@ namespace BankApp
                 {
                     Console.WriteLine(" * Could not find customer. * ");
                 }
-
             }
             else
             {
@@ -222,10 +221,8 @@ namespace BankApp
             Console.WriteLine("Organization number: " + foundCust.OrganizationNumber);
             Console.WriteLine("Name: " + foundCust.OrganizationName);
             Console.WriteLine("Address: " + foundCust.OrganizationAddress);
-
             Console.WriteLine();
             Console.WriteLine("Accounts: ");
-
             decimal totalBalance = 0;
             foreach (var item in findAccounts)
             {
@@ -239,11 +236,11 @@ namespace BankApp
         public void SearchCustomer()
         {
             Console.WriteLine(" * Search customer. *");
-            Console.Write(" * Name or zipcode: ");
+            Console.Write(" * Name or city: ");
             string cust = Console.ReadLine();
             var findCust = from customer in customers
                            where (customer.Value.OrganizationName.Contains(cust) ||
-                                    customer.Value.OrganizationCity.Contains(cust)) && !String.IsNullOrWhiteSpace(cust)
+                                    customer.Value.OrganizationCity.Contains(cust))
                            select customer;
             if (!(findCust.Count() < 1))
             {
@@ -271,7 +268,6 @@ namespace BankApp
                                 where accID == account.Value.AccountNumber
                                 select account.Value).Single();
                 FindTransactions(findAcc);
-                
             }
         }
 

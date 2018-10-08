@@ -71,7 +71,6 @@ namespace BankApp
 
         public void CalculateAndAddInterestToAccounts()
         {
-            //TODO: Need to double check that the interest and debtinterest is working as intended...
             var getAccounts = from account in DataBase.accounts
                              select account.Value;
             foreach (var item in getAccounts)
@@ -84,7 +83,7 @@ namespace BankApp
                     item.Balance += decimal.Round(balance * item.Interest, 4);
                     item.Balance += decimal.Round(-balance * item.DebtInterest, 4);
                     item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
-                                                                item.AccountNumber, -balance * item.Interest,
+                                                                item.AccountNumber, decimal.Round((balance * item.Interest) + (-balance * item.DebtInterest), 4),
                                                                     item.Balance, "Interest"));
                 }
                 else
@@ -92,7 +91,7 @@ namespace BankApp
                     balance = item.Balance;
                     item.Balance += decimal.Round(balance * item.Interest, 4);
                     item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
-                                                                item.AccountNumber, balance * item.Interest,
+                                                                item.AccountNumber, decimal.Round(balance * item.Interest, 4),
                                                                     item.Balance, "Interest"));
                 }
             }
@@ -257,7 +256,6 @@ namespace BankApp
 
         private void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
         {
-
             findAcc.Balance -= decimal.Add(currency, 0.00M);
             findSecAcc.Balance += decimal.Add(currency, 0.00M);
             if(findAcc.Balance < 0)
