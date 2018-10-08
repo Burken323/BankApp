@@ -144,5 +144,22 @@ namespace BankApp
                 }
             }
         }
+
+        public static void SaveTransaction(Transaction transaction)
+        {
+            using (var writer = new StreamWriter("TransactionLog.txt", true))
+            {
+                string line = string.Join(";", new string[]
+                {
+                    transaction.Date,
+                    transaction.Sender.ToString(),
+                    transaction.Reciever.ToString(),
+                    transaction.Amount.ToString(),
+                    transaction.CurrentBalance.ToString(),
+                    transaction.Type
+                });
+                writer.WriteLine(line);
+            }
+        }
     }
 }

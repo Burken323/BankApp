@@ -82,17 +82,21 @@ namespace BankApp
                     balance = -item.Balance;
                     item.Balance += decimal.Round(balance * item.Interest, 4);
                     item.Balance += decimal.Round(-balance * item.DebtInterest, 4);
-                    item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
-                                                                item.AccountNumber, decimal.Round((balance * item.Interest) + (-balance * item.DebtInterest), 4),
-                                                                    item.Balance, "Interest"));
+                    Transaction transaction = new Transaction(DateTime.Now.ToString(), item.AccountNumber, item.AccountNumber,
+                                                                decimal.Round((balance * item.Interest) + (-balance * item.DebtInterest), 4),
+                                                                    item.Balance, "Interest");
+                    item.transactions.Add(transaction);
+                    FileManager.SaveTransaction(transaction);
                 }
                 else
                 {
                     balance = item.Balance;
                     item.Balance += decimal.Round(balance * item.Interest, 4);
-                    item.transactions.Add(new Transaction(DateTime.Now.ToString(), item.AccountNumber,
+                    Transaction transaction = new Transaction(DateTime.Now.ToString(), item.AccountNumber,
                                                                 item.AccountNumber, decimal.Round(balance * item.Interest, 4),
-                                                                    item.Balance, "Interest"));
+                                                                    item.Balance, "Interest");
+                    item.transactions.Add(transaction);
+                    FileManager.SaveTransaction(transaction);
                 }
             }
             Console.WriteLine(" * Interest added to all accounts. * ");
@@ -145,8 +149,10 @@ namespace BankApp
                     if (InputManager.VerifyCurrency(DataBase, amount, out decimal currency))
                     {
                         findAcc.Deposit(currency);
-                        findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
-                                                    findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Deposit"));
+                        Transaction transaction = new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
+                                                    findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Deposit");
+                        findAcc.transactions.Add(transaction);
+                        FileManager.SaveTransaction(transaction);
                     }
                 }
             }
@@ -176,8 +182,10 @@ namespace BankApp
                     {
                         if (findAcc.Withdraw(currency))
                         {
-                            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
-                                                        findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Withdrawal"));
+                            Transaction transaction = new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
+                                                        findAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Withdrawal");
+                            findAcc.transactions.Add(transaction);
+                            FileManager.SaveTransaction(transaction);
                         }
                     }
                 } 
