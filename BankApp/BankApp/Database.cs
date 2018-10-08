@@ -89,7 +89,7 @@ namespace BankApp
             Console.WriteLine(" * Remove customer from bank. *");
             Console.Write(" * Customerid: ");
             string id = Console.ReadLine();
-            if (int.TryParse(id, out int custId))
+            if (InputManager.VerifyCustomer(customers, id, out int custId))
             {
                 RemoveCustomer(custId);
             }
@@ -101,34 +101,26 @@ namespace BankApp
 
         public void RemoveCustomer(int id)
         {
-            var keys = customers.Keys;
             var getBalance = (from account in accounts
-                               where account.Value.CustomerId == id
-                               select account.Value.Balance).Sum();
-            if (keys.Contains(id))
+                             where account.Value.CustomerId == id
+                             select account.Value.Balance).Sum();
+            if (getBalance == 0)
             {
-                if (getBalance == 0)
+                customers.Remove(id);
+                CustomerCount--;
+                var getAccounts = (from account in accounts
+                                    where account.Value.CustomerId == id
+                                    select account.Value).ToList();
+                foreach (var item in getAccounts)
                 {
-                    customers.Remove(id);
-                    CustomerCount--;
-                    var getAccounts = (from account in accounts
-                                       where account.Value.CustomerId == id
-                                       select account.Value).ToList();
-                    foreach (var item in getAccounts)
-                    {
-                        accounts.Remove(item.AccountNumber);
-                    }
-                    Console.WriteLine();
-                    Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
+                    accounts.Remove(item.AccountNumber);
                 }
-                else
-                {
-                    Console.WriteLine(" * Customer still has an account with balance left on it. * ");
-                }
+                Console.WriteLine();
+                Console.WriteLine(" ** Customer " + id.ToString() + " removed. ** ");
             }
             else
             {
-                Console.WriteLine("Could not find customer.");
+                Console.WriteLine(" * Customer still has an account with balance left on it. * ");
             }
         }
 
@@ -136,24 +128,14 @@ namespace BankApp
         {
             Console.Write(" * Customer ID: ");
             string cust = Console.ReadLine();
-            if (int.TryParse(cust, out int custID))
+            if (InputManager.VerifyCustomer(customers, cust, out int custID))
             {
-                var findCust = (from customer in customers
-                               where customer.Value.Id == custID
-                               select customer).Count();
-                if(findCust == 1)
-                {
-                    int latestAccount = (from account in accounts
-                                        select account.Value.AccountNumber).Max();
-                    accounts.Add(latestAccount + 1, new Account(latestAccount + 1, custID, 0));
-                    AccountCount++;
-                    Console.WriteLine();
-                    Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + cust + ". **");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Could not find that customer.");
+                int latestAccount = (from account in accounts
+                                    select account.Value.AccountNumber).Max();
+                accounts.Add(latestAccount + 1, new Account(latestAccount + 1, custID, 0));
+                AccountCount++;
+                Console.WriteLine();
+                Console.WriteLine(" ** Account " + (latestAccount + 1).ToString() + " added to customer " + cust + ". **");
             }
         }
 
@@ -162,31 +144,17 @@ namespace BankApp
             Console.WriteLine(" * Remove account from bank. * ");
             Console.Write(" * Customer ID: ");
             string id = Console.ReadLine();
-            if (int.TryParse(id, out int custID))
+            if (InputManager.VerifyCustomer(customers, id, out int custID))
             {
-                int findCust = (from customer in customers
-                                where customer.Value.Id == custID
-                                select customer).Count();
-                if (findCust == 1)
+                Console.Write(" * Account ID: ");
+                string acc = Console.ReadLine();
+                if (InputManager.VerifyAccount(accounts, acc, out int accID))
                 {
-                    Console.Write(" * Account ID: ");
-                    string acc = Console.ReadLine();
-                    if (int.TryParse(acc, out int accID))
-                    {
-                        var selAccount = (from account in accounts
-                                          where account.Value.AccountNumber == accID
-                                          select account).Single();
-                        RemoveAccount(selAccount.Value.AccountNumber);
-                    }
-                    else
-                    {
-                        Console.WriteLine(" * Account not found. * ");
-                    }
+                    var selAccount = (from account in accounts
+                                        where account.Value.AccountNumber == accID
+                                        select account).Single();
+                    RemoveAccount(selAccount.Value.AccountNumber);
                 }
-            }
-            else
-            {
-                Console.WriteLine(" * Customer not found. * ");
             }
         }
 
@@ -203,7 +171,7 @@ namespace BankApp
             }
             else
             {
-                Console.WriteLine("Account still contains currency.");
+                Console.WriteLine(" * Account still contains currency. * ");
             }
         }
 
@@ -297,24 +265,13 @@ namespace BankApp
             Console.WriteLine(" * Accountimage * ");
             Console.Write(" * Account ID: ");
             string acc = Console.ReadLine();
-            if (int.TryParse(acc, out int accID))
+            if (InputManager.VerifyAccount(accounts, acc, out int accID))
             {
-                if (accounts.ContainsKey(accID))
-                {
-                    var findAcc = (from account in accounts
-                                   where accID == account.Value.AccountNumber
-                                   select account.Value).Single();
-                    FindTransactions(findAcc);
-                }
-                else
-                {
-                    Console.WriteLine(" * Account doesn't exist. *");
-                }
-
-            }
-            else
-            {
-                Console.WriteLine(" * Input invalid. * ");
+                var findAcc = (from account in accounts
+                                where accID == account.Value.AccountNumber
+                                select account.Value).Single();
+                FindTransactions(findAcc);
+                
             }
         }
 

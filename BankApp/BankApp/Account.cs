@@ -39,6 +39,10 @@ namespace BankApp
                 Credit = credit;
                 Console.WriteLine(" * Credit set to: " + Credit + ". * ");
             }
+            else
+            {
+                Console.WriteLine(" * Invalid input. * ");
+            }
         }
         public void SetDebtInterest()
         {
@@ -118,16 +122,8 @@ namespace BankApp
                 Balance -= decimal.Add(currency, 0.00M);
                 if(Balance < 0)
                 {
-                    DebtInterest = 0.05M / 365;
-                    if(Interest - DebtInterest > 0)
-                    {
-                        Interest = Interest - DebtInterest;
-                        Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
-                    }
-                    else
-                    {
-                        Console.WriteLine(" ** ERROR! DebtInterest cannot be greater than the interest. ** ");
-                    }
+                    DebtInterest = 0.3M / 365;
+                    Console.WriteLine(" * Current balance in account: " + AccountNumber + ", has changed to: " + Balance);
                 }
                 else
                 {
