@@ -87,7 +87,7 @@ namespace BankApp
             }
             else
             {
-                Balance += decimal.Round(currency, 4);
+                Balance += decimal.Round(currency, 2);
                 if (Balance > 0)
                 {
                     DebtInterest = 0;
@@ -106,12 +106,12 @@ namespace BankApp
             else if((Balance - currency) < (-Credit))
             {
                 Console.WriteLine(" ** Insufficient credits on account. ** ");
-                Console.WriteLine(" ** Current balance: " + Balance + ", user tried to withdraw: " + decimal.Round(currency, 4) + " ** ");
+                Console.WriteLine(" ** Current balance: " + Balance + ", user tried to withdraw: " + decimal.Round(currency, 2) + " ** ");
                 return false;
             }
             else
             {
-                Balance -= decimal.Round(currency, 4);
+                Balance -= decimal.Round(currency, 2);
                 if(Balance < 0)
                 {
                     DebtInterest = 0.3M / 365;

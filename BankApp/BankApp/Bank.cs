@@ -80,10 +80,10 @@ namespace BankApp
                 if(item.Balance < 0)
                 {
                     balance = -item.Balance;
-                    item.Balance += decimal.Round(balance * item.Interest, 4);
-                    item.Balance += decimal.Round(-balance * item.DebtInterest, 4);
+                    //item.Balance += decimal.Round(balance * item.Interest, 4);
+                    item.Balance += decimal.Round(-balance * item.DebtInterest, 2);
                     Transaction transaction = new Transaction(DateTime.Now.ToString(), item.AccountNumber, item.AccountNumber,
-                                                                decimal.Round((balance * item.Interest) + (-balance * item.DebtInterest), 4),
+                                                                decimal.Round(-balance * item.DebtInterest, 2),
                                                                     item.Balance, "Interest");
                     item.transactions.Add(transaction);
                     FileManager.SaveTransaction(transaction);
@@ -91,9 +91,9 @@ namespace BankApp
                 else
                 {
                     balance = item.Balance;
-                    item.Balance += decimal.Round(balance * item.Interest, 4);
+                    item.Balance += decimal.Round(balance * item.Interest, 2);
                     Transaction transaction = new Transaction(DateTime.Now.ToString(), item.AccountNumber,
-                                                                item.AccountNumber, decimal.Round(balance * item.Interest, 4),
+                                                                item.AccountNumber, decimal.Round(balance * item.Interest, 2),
                                                                     item.Balance, "Interest");
                     item.transactions.Add(transaction);
                     FileManager.SaveTransaction(transaction);
@@ -254,7 +254,7 @@ namespace BankApp
             {
                 Console.WriteLine(" ** Insufficient credits on account. ** ");
                 Console.WriteLine(" ** Current balance: " + findAcc.Balance + ", user tried to withdraw: " +
-                                        decimal.Add(currency, 0.00M) + " ** ");
+                                        decimal.Round(currency, 2) + " ** ");
             }
             else
             {
@@ -264,29 +264,26 @@ namespace BankApp
 
         private void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
         {
-            findAcc.Balance -= decimal.Add(currency, 0.00M);
-            findSecAcc.Balance += decimal.Add(currency, 0.00M);
+            findAcc.Balance -= decimal.Round(currency, 2);
+            findSecAcc.Balance += decimal.Round(currency, 2);
             if(findAcc.Balance < 0)
             {
                 findAcc.DebtInterest = 0.3M / 365;
-                if (findAcc.Interest - findAcc.DebtInterest > 0)
-                {
-                    Console.WriteLine(" * Current balance in account: " + findAcc.AccountNumber + ", has changed to: " + findAcc.Balance);
-                }
-                else
-                {
-                    Console.WriteLine(" ** ERROR! DebtInterest cannot be greater than the interest. ** ");
-                }
+                Console.WriteLine(" * Current balance in account: " + findAcc.AccountNumber + ", has changed to: " + findAcc.Balance);
             }
             if(findSecAcc.Balance > 0)
             {
                 findSecAcc.DebtInterest = 0;
                 findSecAcc.Interest = 0.25M / 365;
             }
-            findAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
-                                        findSecAcc.AccountNumber, decimal.Add(currency, 0.00M), findAcc.Balance, "Transfer"));
-            findSecAcc.transactions.Add(new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber, 
-                                        findSecAcc.AccountNumber, decimal.Add(currency, 0.00M), findSecAcc.Balance, "Transfer"));
+            Transaction transaction = new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
+                                        findSecAcc.AccountNumber, decimal.Round(currency, 2), findAcc.Balance, "Transfer");
+            findAcc.transactions.Add(transaction);
+            FileManager.SaveTransaction(transaction);
+            transaction = new Transaction(DateTime.Now.ToString(), findAcc.AccountNumber,
+                                        findSecAcc.AccountNumber, decimal.Round(currency, 2), findSecAcc.Balance, "Transfer");
+            findSecAcc.transactions.Add(transaction);
+            FileManager.SaveTransaction(transaction);
             Console.WriteLine();
             Console.WriteLine(" * Successfully transferred " + currency + " from " + findAcc.AccountNumber + " to " + findSecAcc.AccountNumber + " * ");
             Console.WriteLine();
