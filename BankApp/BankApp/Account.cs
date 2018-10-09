@@ -24,7 +24,7 @@ namespace BankApp
             Balance = bal;
             YearInterest = 0.25M;
             Interest = 0.25M / 365;
-            Credit = 10000;
+            Credit = 0;
             DebtInterest = 0;
             transactions = new List<Transaction>();
         }

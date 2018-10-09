@@ -104,7 +104,7 @@ namespace BankApp
                     {
                         item.Value.AccountNumber.ToString(),
                         item.Value.CustomerId.ToString(),
-                        item.Value.Balance.ToString()
+                        item.Value.Balance.ToString(CultureInfo.InvariantCulture)
                     });
                     writer.WriteLine(line);
                 }
@@ -135,8 +135,8 @@ namespace BankApp
                             item[i].Date,
                             item[i].Sender.ToString(),
                             item[i].Reciever.ToString(),
-                            item[i].Amount.ToString(),
-                            item[i].CurrentBalance.ToString(),
+                            item[i].Amount.ToString(CultureInfo.InvariantCulture),
+                            item[i].CurrentBalance.ToString(CultureInfo.InvariantCulture),
                             item[i].Type
                         });
                         writer.WriteLine(line);
@@ -154,8 +154,8 @@ namespace BankApp
                     transaction.Date,
                     transaction.Sender.ToString(),
                     transaction.Reciever.ToString(),
-                    transaction.Amount.ToString(),
-                    transaction.CurrentBalance.ToString(),
+                    transaction.Amount.ToString(CultureInfo.InvariantCulture),
+                    transaction.CurrentBalance.ToString(CultureInfo.InvariantCulture),
                     transaction.Type
                 });
                 writer.WriteLine(line);

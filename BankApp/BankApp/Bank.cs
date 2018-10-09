@@ -293,9 +293,7 @@ namespace BankApp
         {
             Console.WriteLine("  ** Saving data to file.. **  ");
             DataBase.SaveDataBase();
-
-            Console.WriteLine("  ** Exiting program. **  ");
-            //Save data into different file and exit.
+            Console.WriteLine("  ** Press any key to exit program. **  ");
             Console.ReadLine();
             Environment.Exit(0);
         }
