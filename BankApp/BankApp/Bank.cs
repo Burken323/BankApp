@@ -265,7 +265,9 @@ namespace BankApp
         private void TransferToAcc(Account findAcc, Account findSecAcc, decimal currency)
         {
             findAcc.Balance -= decimal.Round(currency, 2);
+            //findAcc.Withdraw(currency);
             findSecAcc.Balance += decimal.Round(currency, 2);
+            //findSecAcc.Deposit(currency);
             if(findAcc.Balance < 0)
             {
                 findAcc.DebtInterest = 0.3M / 365;
@@ -292,6 +294,11 @@ namespace BankApp
         public void SaveAndExit()
         {
             Console.WriteLine("  ** Saving data to file.. **  ");
+            Console.WriteLine(" * Current customers: " + DataBase.CustomerCount);
+            Console.WriteLine(" * Current accounts: " + DataBase.AccountCount);
+            var getTotalBalance = (from account in DataBase.accounts
+                                  select account.Value.Balance).Sum();
+            Console.WriteLine(" * Current balance in bank: " + getTotalBalance);
             DataBase.SaveDataBase();
             Console.WriteLine("  ** Press any key to exit program. **  ");
             Console.ReadLine();

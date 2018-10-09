@@ -158,7 +158,7 @@ namespace BankApp
             }
         }
 
-        public void RemoveAccount(int id)
+        private void RemoveAccount(int id)
         {
             var keys = accounts.Keys;
             
@@ -237,10 +237,10 @@ namespace BankApp
         {
             Console.WriteLine(" * Search customer. *");
             Console.Write(" * Name or city: ");
-            string cust = Console.ReadLine();
+            string cust = Console.ReadLine().ToLower();
             var findCust = from customer in customers
-                           where (customer.Value.OrganizationName.Contains(cust) ||
-                                    customer.Value.OrganizationCity.Contains(cust))
+                           where (customer.Value.OrganizationName.ToLower().Contains(cust) ||
+                                    customer.Value.OrganizationCity.ToLower().Contains(cust))
                            select customer;
             if (!(findCust.Count() < 1))
             {

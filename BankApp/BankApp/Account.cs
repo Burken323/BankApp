@@ -22,8 +22,8 @@ namespace BankApp
             AccountNumber = accNum;
             CustomerId = custId;
             Balance = bal;
-            YearInterest = 0.25M;
-            Interest = 0.25M / 365;
+            YearInterest = 0;
+            Interest = 0;
             Credit = 0;
             DebtInterest = 0;
             transactions = new List<Transaction>();
